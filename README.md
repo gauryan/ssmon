@@ -13,3 +13,4 @@
 
 ### 스크린샷
 <img src="screenshots/login_form.png" width="300px" title="Login"/>
+<img src="screenshots/list_admin.png" width="300px" title="List Admin"/>
