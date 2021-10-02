@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title">관리자 추가</h4>
+</div>
+<div class="modal-body">
+  <form name="insert_form" action="/mgmt/admin/insert" method="post">
+		<input type="hidden" name="_csrf" value="{{.csrfToken}}">
+    <div class="form-group">
+      <label>아이디 <small>(필수)</small></label>
+      <input type="text" name="userid" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>비밀번호 <small>(필수)</small></label>
+      <input type="password" id="password" name="passwd1" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>비밀번호 확인 <small>(필수)</small></label>
+      <input type="password" name="passwd2" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>별명 <small>(필수)</small></label>
+      <input type="text" name="nick" class="form-control" required>
+    </div>
+    <div class="form-group" style="text-align: right">
+      <input class="btn btn-primary" type="submit" value="관리자 추가" />
+    </div>
+  </form>
+</div>

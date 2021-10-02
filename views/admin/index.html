@@ -1,0 +1,51 @@
+<div class="container">
+  <a href="/mgmt/logout">[로그아웃]</a>
+  <div class="page-header">
+    <h1>Administrator (관리자)</h1>
+  </div>
+ 
+  <div style="text-align: right; padding-bottom: 10px">
+    <a href="/mgmt/admin/insert_form" class="btn btn-default" data-toggle="modal" data-target="#myModal">관리자 추가</a>
+  </div>
+ 
+  <table class="table table-striped table-hover table-condensed">
+  <tr>
+    <th style="text-align: center">아이디</th>
+    <th style="text-align: center">별명</th>
+    <th style="text-align: center">수정/삭제</th>
+  </tr>
+  {{range .Admins}}
+  <tr>
+    <td style="text-align: center">{{.Userid}}</td>
+    <td style="text-align: center">{{.Nick}}</td>
+    <td style="text-align: center">
+      <a href="/mgmt/admin/chg_passwd_form/{{.Sno}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">비밀번호변경</a>
+      <a href="/mgmt/admin/update_form/{{.Sno}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">수정</a>
+      <button onclick="delete_admin('/mgmt/admin/delete/{{.Sno}}')" class="btn btn-default btn-xs">삭제</button>
+    </td>
+  </tr>
+  {{end}}
+  </table>
+</div>
+ 
+<div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+ 
+<script>
+// Modal Remote Reload
+$(document).on('hidden.bs.modal', function (e) {
+    $(e.target).removeData('bs.modal');
+})
+</script>
+ 
+<script>
+function delete_admin(url) {
+    var result = confirm("관리자를 정말로 삭제하시겠습니까?");
+    if( result == false ) return;
+    location.href = url;
+}
+</script>

@@ -1,0 +1,6 @@
+web/logs
+web/tmp
+web/server.pid
+*.swp
+*~
+.DS_Store
