@@ -1,1 +1,2 @@
-go run main.go
+# go run main.go
+air -c .air.toml
