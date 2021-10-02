@@ -11,7 +11,7 @@
 
 <body class="text-center">
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-	<div class="navbar-nav"><div class="nav-item text-nowrap px-3" style="color: white">SSMON</div></div>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">SSMON</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -26,15 +26,14 @@
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
-        <ul class="nav flex-column" style="text-align: left">
-          <li class="nav-item"> <a class="nav-link" href="/mgmt/tcp_server#"> TCP 서버 관리 </a> </li>
-          <li class="nav-item"> <a class="nav-link" href="/mgmt/tcp_monitor"> TCP 서버 모니터링</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="/mgmt/http_server"> HTTP 서버 관리</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="/mgmt/http_monitor"> HTTP 서버 모니터링</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="/mgmt/ping_server"> PING 서버 관리</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="/mgmt/ping_monitor"> PING 서버 모니터링</a> </li>
-          <li class="nav-item"> <a class="nav-link active" href="/mgmt/admin">관리자</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="/mgmt/setting"> 설정</a> </li>
+        <ul class="nav flex-column">
+          <li class="nav-item"> <a class="nav-link" href="#"> TCP 서버 관리 </a> </li>
+          <li class="nav-item"> <a class="nav-link" href="#"> TCP 서버 모니터링</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="#"> HTTP 서버 관리</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="#"> HTTP 서버 모니터링</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="#"> PING 서버 관리</a> </li>
+          <li class="nav-item"> <a class="nav-link" href="#"> PING 서버 모니터링</a> </li>
+          <li class="nav-item"> <a class="nav-link active" aria-current="page" href="#">관리자</a> </li>
         </ul>
       </div>
     </nav>

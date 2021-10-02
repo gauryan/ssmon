@@ -1,32 +1,34 @@
-<div class="container">
-  <a href="/logout">[로그아웃]</a>
-  <div class="page-header">
-    <h1>Administrator (관리자)</h1>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Administrator (관리자)</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <a href="/mgmt/admin/insert_form" class="btn btn-sm btn-outline-secondary">관리자 추가</a>
   </div>
- 
-  <div style="text-align: right; padding-bottom: 10px">
-    <a href="/mgmt/admin/insert_form" class="btn btn-default" data-toggle="modal" data-target="#myModal">관리자 추가</a>
-  </div>
- 
-  <table class="table table-striped table-hover table-condensed">
-  <tr>
-    <th style="text-align: center">아이디</th>
-    <th style="text-align: center">별명</th>
-    <th style="text-align: center">수정/삭제</th>
-  </tr>
-  {{range .Admins}}
-  <tr>
-    <td style="text-align: center">{{.Userid}}</td>
-    <td style="text-align: center">{{.Nick}}</td>
-    <td style="text-align: center">
-      <a href="/mgmt/admin/chg_passwd_form/{{.Id}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">비밀번호변경</a>
-      <a href="/mgmt/admin/update_form/{{.Id}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">수정</a>
-      <button onclick="delete_admin('/mgmt/admin/delete/{{.Id}}')" class="btn btn-default btn-xs">삭제</button>
-    </td>
-  </tr>
-  {{end}}
-  </table>
 </div>
+
+<table class="table table-hover table-sm">
+<thead>
+<tr>
+  <th style="text-align: center">아이디</th>
+  <th style="text-align: center">별명</th>
+  <th style="text-align: center">핸드폰</th>
+  <th style="text-align: center">수정/삭제</th>
+</tr>
+</thead>
+<tbody>
+{{range .Admins}}
+<tr>
+  <td style="text-align: center">{{.Userid}}</td>
+  <td style="text-align: center">{{.Nick}} &nbsp;</td>
+  <td style="text-align: center">{{.Phone}} &nbsp;</td>
+  <td style="text-align: center">
+    <a href="/mgmt/admin/chg_passwd_form/{{.Id}}" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal">비밀번호변경</a>
+    <a href="/mgmt/admin/update_form/{{.Id}}" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal">수정</a>
+    <button onclick="delete_admin('/mgmt/admin/delete/{{.Id}}')" class="btn btn-sm btn-outline-secondary">삭제</button>
+  </td>
+</tr>
+{{end}}
+</tbody>
+</table>
  
 <div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
