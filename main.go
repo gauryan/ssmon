@@ -11,6 +11,7 @@ import (
 
 func main() {
 	app := routes.Router()
+	app.Static("/", "./static")
 	database.Init()
 	store.Init()
 	app.Listen(":"+config.Config("APP_PORT"))
