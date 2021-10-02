@@ -14,7 +14,7 @@ func authSSMON(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	ssmom_login := session.Get("ssmon-login")
+	ssmon_login := session.Get("ssmon-login")
 	if ssmon_login != true {
 		return c.Redirect("/")
 	}
