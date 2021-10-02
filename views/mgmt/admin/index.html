@@ -1,7 +1,12 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">Administrator (관리자)</h1>
   <div class="btn-toolbar mb-2 mb-md-0">
-    <a href="/mgmt/admin/insert_form" class="btn btn-sm btn-outline-secondary">관리자 추가</a>
+		<!--
+    <a href="/mgmt/admin/insert_form" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal">관리자 추가</a>
+		검색어 : bootstrap modal load dynamic content
+		https://stackoverflow.com/questions/21863462/bootstrap-modal-dynamic-content
+		-->
+		<a href="javascript:$('#myModal .modal-content').load('/mgmt/admin/insert_form',function(e){$('#myModal').modal('show');});" class="btn btn-sm btn-outline-dark">관리자 추가</a>
   </div>
 </div>
 
@@ -21,8 +26,8 @@
   <td style="text-align: center">{{.Nick}} &nbsp;</td>
   <td style="text-align: center">{{.Phone}} &nbsp;</td>
   <td style="text-align: center">
-    <a href="/mgmt/admin/chg_passwd_form/{{.Id}}" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal">비밀번호변경</a>
-    <a href="/mgmt/admin/update_form/{{.Id}}" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal">수정</a>
+    <a href="/mgmt/admin/chg_passwd_form/{{.Id}}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal">비밀번호변경</a>
+    <a href="/mgmt/admin/update_form/{{.Id}}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal">수정</a>
     <button onclick="delete_admin('/mgmt/admin/delete/{{.Id}}')" class="btn btn-sm btn-outline-secondary">삭제</button>
   </td>
 </tr>
@@ -31,7 +36,7 @@
 </table>
  
 <div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
     </div>
   </div>

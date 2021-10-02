@@ -35,12 +35,11 @@ func ListAdmin(c *fiber.Ctx) error {
 
 
 // 관리자 추가 폼
-// /admin/inser_form
-/*
+// /mgmt/admin/insert_form
 func InsertForm(c *fiber.Ctx) error {
-	return c.Render("admin/insert_form", fiber.Map{})
+	return c.Render("mgmt/admin/insert_form", fiber.Map{})
 }
-*/
+
 
 // 관리자 추가
 // /admin/insert
