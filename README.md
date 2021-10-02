@@ -12,5 +12,4 @@
   * Slack 알림
 
 ### 스크린샷
-![로그인](/screenshots/login_form.png#style=max-width:250px;)
-
+<img src="screenshots/login_form.png" width="250px" title="Login"/>
