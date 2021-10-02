@@ -8,32 +8,43 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+
+// SELECT ID, USERID, PASSWD, NICK, PHONE FROM TB_ADMIN;
+type Admin struct {
+	Id     int
+	Userid string
+	Passwd string
+	Nick   string
+	Phone  string
+}
+
+
 // Admin 목록
-// /admin
+// /mgmt/admin
 func ListAdmin(c *fiber.Ctx) error {
-	type Admin struct {
-		Sno    int
-		Userid string
-		Nick   string
-	}
 	var admins []Admin
 
 	db := database.DBConn
-	// db.Raw("SELECT sno, userid, nick FROM admins").Scan(&admins)
-	db.Raw("CALL listAdmins()").Scan(&admins)
+	db.Raw("CALL SP_LIST_ADMIN()").Scan(&admins)
+	// db.Raw("SELECT id, userid, passwd, nick, phone FROM TB_ADMIN").Scan(&admins)
+	// db.Raw("SELECT ID, USERID, PASSWD, NICK, PHONE FROM TB_ADMIN").Scan(&admins) // 컬럼은 소문자로 써야 하며, 테이블이름은 대소문자를 가린다.
 
 	data := fiber.Map{"Admins": admins}
-	return c.Render("admin/index", data, "base")
+	return c.Render("mgmt/admin/index", data, "base")
 }
+
 
 // 관리자 추가 폼
 // /admin/inser_form
+/*
 func InsertForm(c *fiber.Ctx) error {
 	return c.Render("admin/insert_form", fiber.Map{})
 }
+*/
 
 // 관리자 추가
 // /admin/insert
+/*
 func Insert(c *fiber.Ctx) error {
 	userid := c.FormValue("userid")
 	passwd1 := c.FormValue("passwd1")
@@ -48,9 +59,12 @@ func Insert(c *fiber.Ctx) error {
 
 	return c.Redirect("/admin")
 }
+*/
+
 
 // 관리자 비밀번호변경 폼
 // /admin/chg_passwd_form/:id
+/*
 func ChgPasswdForm(c *fiber.Ctx) error {
 	type Admin struct {
 		Sno    int
@@ -67,9 +81,11 @@ func ChgPasswdForm(c *fiber.Ctx) error {
 	data := fiber.Map{"Admin": admin}
 	return c.Render("admin/chg_passwd_form", data)
 }
+*/
 
 // 관리자 비밀번호변경
 // /admin/chg_passwd
+/*
 func ChgPasswd(c *fiber.Ctx) error {
 	id := c.FormValue("id")
 	passwd1 := c.FormValue("passwd1")
@@ -83,9 +99,11 @@ func ChgPasswd(c *fiber.Ctx) error {
 
 	return c.Redirect("/admin")
 }
+*/
 
 // 관리자 수정 폼
 // /admin/update_form/{id}
+/*
 func UpdateForm(c *fiber.Ctx) error {
 	type Admin struct {
 		Sno    int
@@ -102,9 +120,11 @@ func UpdateForm(c *fiber.Ctx) error {
 	data := fiber.Map{"Admin": admin}
 	return c.Render("admin/update_form", data)
 }
+*/
 
 // 관리자 수정
 // /admin/update
+/*
 func Update(c *fiber.Ctx) error {
 	id := c.FormValue("id")
 	nick := c.FormValue("nick")
@@ -114,9 +134,11 @@ func Update(c *fiber.Ctx) error {
 
 	return c.Redirect("/admin")
 }
+*/
 
 // 관리자 삭제
 // /admin/delete/{id}
+/*
 func Delete(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -124,3 +146,5 @@ func Delete(c *fiber.Ctx) error {
 	db.Exec("CALL deleteAdmin(?)", id)
 	return c.Redirect("/admin")
 }
+*/
+

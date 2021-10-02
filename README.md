@@ -12,4 +12,4 @@
   * Slack 알림
 
 ### 스크린샷
-<img src="screenshots/login_form.png" width="250px" title="Login"/>
+<img src="screenshots/login_form.png" width="300px" title="Login"/>

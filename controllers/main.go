@@ -16,7 +16,7 @@ func Index(c *fiber.Ctx) error {
 // 로그인
 func Login(c *fiber.Ctx) error {
 	type Result struct {
-		IsMember int
+		Is_admin string
 	}
 	var result Result
 
@@ -29,14 +29,15 @@ func Login(c *fiber.Ctx) error {
 	passwd := c.FormValue("passwd")
 
 	db := database.DBConn
-	db.Raw("SELECT isMember(?, ?) as is_member", userid, passwd).First(&result)
+	db.Raw("CALL IS_ADMIN(?, ?)", userid, passwd).First(&result)
 
-	if result.IsMember == 1 {
+	if result.Is_admin == "Y" {
 		session.Set("ssmon-login", true)
 		session.Save()
 
-		return c.Redirect("/admin")
+		return c.Redirect("/mgmt/admin")
 	}
+
 	return c.Redirect("/")
 }
 

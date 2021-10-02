@@ -1,5 +1,5 @@
 <div class="container">
-  <a href="/mgmt/logout">[로그아웃]</a>
+  <a href="/logout">[로그아웃]</a>
   <div class="page-header">
     <h1>Administrator (관리자)</h1>
   </div>
@@ -19,9 +19,9 @@
     <td style="text-align: center">{{.Userid}}</td>
     <td style="text-align: center">{{.Nick}}</td>
     <td style="text-align: center">
-      <a href="/mgmt/admin/chg_passwd_form/{{.Sno}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">비밀번호변경</a>
-      <a href="/mgmt/admin/update_form/{{.Sno}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">수정</a>
-      <button onclick="delete_admin('/mgmt/admin/delete/{{.Sno}}')" class="btn btn-default btn-xs">삭제</button>
+      <a href="/mgmt/admin/chg_passwd_form/{{.Id}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">비밀번호변경</a>
+      <a href="/mgmt/admin/update_form/{{.Id}}" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">수정</a>
+      <button onclick="delete_admin('/mgmt/admin/delete/{{.Id}}')" class="btn btn-default btn-xs">삭제</button>
     </td>
   </tr>
   {{end}}
