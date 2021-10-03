@@ -29,7 +29,7 @@ func Login(c *fiber.Ctx) error {
 	passwd := c.FormValue("passwd")
 
 	db := database.DBConn
-	db.Raw("CALL IS_ADMIN(?, ?)", userid, passwd).First(&result)
+	db.Raw("CALL SP_IS_ADMIN(?, ?)", userid, passwd).First(&result)
 
 	if result.Is_admin == "Y" {
 		session.Set("ssmon-login", true)

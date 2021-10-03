@@ -4,24 +4,28 @@
 </div>
 <div class="modal-body">
   <form name="insert_form" action="/mgmt/admin/insert" method="post">
-    <div style="text-align: left">
+    <div style="text-align: left; padding-bottom: 10px;">
       <label>아이디 <small>(필수)</small></label>
-      <input type="text" name="userid" class="form-control" required>
+      <input type="text" name="userid" class="form-control" required autofocus>
     </div>
-    <div style="text-align: left">
+    <div style="text-align: left; padding-bottom: 10px;">
       <label >비밀번호 <small>(필수)</small></label>
       <input type="password" id="password" name="passwd1" class="form-control" required>
     </div>
-    <div style="text-align: left">
+    <div style="text-align: left; padding-bottom: 10px;">
       <label>비밀번호 확인 <small>(필수)</small></label>
       <input type="password" name="passwd2" class="form-control" required>
     </div>
-    <div style="text-align: left">
+    <div style="text-align: left; padding-bottom: 10px;">
       <label>별명 <small>(필수)</small></label>
       <input type="text" name="nick" class="form-control" required>
     </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>핸드폰</label>
+      <input type="text" name="phone" class="form-control" required>
+    </div>
 		<br>
-    <div class="form-group" style="text-align: right">
+    <div style="text-align: right">
       <input class="btn btn-primary" type="submit" value="관리자 추가" />
     </div>
   </form>
