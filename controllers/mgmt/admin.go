@@ -4,9 +4,10 @@ package mgmt
 
 
 import (
+	"github.com/gauryan/ssmon/store"
 	"github.com/gauryan/ssmon/database"
 	"github.com/gofiber/fiber/v2"
-	// "fmt"
+	"fmt"
 )
 
 
@@ -24,6 +25,12 @@ type Admin struct {
 // /mgmt/admin
 func ListAdmin(c *fiber.Ctx) error {
 	var admins []Admin
+	var flash string
+
+	session, err := store.SessionStore.Get(c)
+    if err != nil {
+        panic(err)
+    }
 
 	db := database.DBConn
 	db.Raw("CALL SP_LIST_ADMIN()").Scan(&admins)
@@ -31,7 +38,12 @@ func ListAdmin(c *fiber.Ctx) error {
 	// db.Raw("SELECT ID, USERID, PASSWD, NICK, PHONE FROM TB_ADMIN").Scan(&admins)
 	// 컬럼은 소문자로 써야 하며, 테이블이름은 대소문자를 가린다.
 
-	data := fiber.Map{"Admins": admins}
+	if session.Get("flash") != nil {
+		flash = fmt.Sprintf("%v", session.Get("flash"))
+		session.Delete("flash")
+		session.Save()
+	}
+	data := fiber.Map{"Admins": admins, "Flash": flash}
 	return c.Render("mgmt/admin/index", data, "base")
 }
 
@@ -52,12 +64,19 @@ func InsertAdmin(c *fiber.Ctx) error {
 	nick    := c.FormValue("nick")
 	phone   := c.FormValue("phone")
 
+	session, err := store.SessionStore.Get(c)
+    if err != nil {
+        panic(err)
+    }
+
 	if passwd1 != passwd2 {
 		return c.Redirect("/mgmt/admin")
 	}
 	db := database.DBConn
-	// db.Exec("CALL insertAdmin(?, ?, ?)", userid, passwd1, nick)
 	db.Exec("CALL SP_INSERT_ADMIN(?, ?, ?, ?)", userid, passwd1, nick, phone)
+
+	session.Set("flash", "새로운 관리자("+nick+")이 추가되었습니다.")
+	session.Save()
 
 	return c.Redirect("/mgmt/admin")
 }
@@ -84,11 +103,19 @@ func ChgPasswdAdmin(c *fiber.Ctx) error {
 	passwd1 := c.FormValue("passwd1")
 	passwd2 := c.FormValue("passwd2")
 
+	session, err := store.SessionStore.Get(c)
+    if err != nil {
+        panic(err)
+    }
+
 	if passwd1 != passwd2 {
 		return c.Redirect("/mgmt/admin")
 	}
 	db := database.DBConn
 	db.Exec("CALL SP_UPDATE_ADMIN_PASSWD(?, ?)", id, passwd1)
+
+	session.Set("flash", "관리자 비밀번호가 변경되었습니다.")
+    session.Save()
 
 	return c.Redirect("/mgmt/admin")
 }
@@ -115,8 +142,16 @@ func UpdateAdmin(c *fiber.Ctx) error {
 	nick  := c.FormValue("nick")
 	phone := c.FormValue("phone")
 
+	session, err := store.SessionStore.Get(c)
+    if err != nil {
+        panic(err)
+    }
+
 	db := database.DBConn
 	db.Exec("CALL SP_UPDATE_ADMIN(?, ?, ?)", id, nick, phone)
+
+	session.Set("flash", "관리자("+nick+")가 수정되었습니다.")
+    session.Save()
 
 	return c.Redirect("/mgmt/admin")
 }
@@ -127,8 +162,17 @@ func UpdateAdmin(c *fiber.Ctx) error {
 func DeleteAdmin(c *fiber.Ctx) error {
 	id := c.Params("id")
 
+	session, err := store.SessionStore.Get(c)
+    if err != nil {
+        panic(err)
+    }
+
 	db := database.DBConn
 	db.Exec("CALL SP_DELETE_ADMIN(?)", id)
+
+	session.Set("flash", "관리자가 삭제되었습니다.")
+    session.Save()
+
 	return c.Redirect("/mgmt/admin")
 }
 

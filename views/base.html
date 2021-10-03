@@ -60,16 +60,19 @@
     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
   <div class="toast-body">
-    Hello, world! This is a toast message.
+		{{ .Flash }}
   </div>
 </div>
 
 
+{{if .Flash}}
 <script>
 $(document).ready(function() {
     $(".toast").toast('show');
 });
 </script>
+{{end}}
+
 
 </body>
 </html>
