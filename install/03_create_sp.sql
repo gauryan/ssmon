@@ -78,3 +78,11 @@ END $$
 DELIMITER ;
 
 
+-- TCP서버 목록
+DELIMITER $$
+CREATE PROCEDURE SP_LIST_TCPSERVER()
+BEGIN
+    SELECT id, name, ip_addr, port, timeout, err_cnt FROM TB_TCP_SERVER;
+END $$
+DELIMITER ;
+

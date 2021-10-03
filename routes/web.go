@@ -46,5 +46,7 @@ func Router() *fiber.App {
 	App2.Post("/admin/update", mgmt.UpdateAdmin)
 	App2.Get("/admin/delete/:id", mgmt.DeleteAdmin)
 
+	App2.Get("/tcp_server", mgmt.ListTCPServer)
+
 	return app
 }

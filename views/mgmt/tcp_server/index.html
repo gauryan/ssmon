@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">관리자</h1>
+  <h1 class="h2">TCP 서버</h1>
   <div class="btn-toolbar mb-2 mb-md-0">
 		<!--
     <a href="/mgmt/admin/insert_form" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal">관리자 추가</a>
@@ -7,30 +7,31 @@
 		검색어 : bootstrap modal load dynamic content
 		https://stackoverflow.com/questions/21863462/bootstrap-modal-dynamic-content
 		-->
-		<a href="javascript:show_dialog('/mgmt/admin/insert_form');" class="btn btn-sm btn-outline-dark">관리자 추가</a>
+		<a href="javascript:show_dialog('/mgmt/tcp_server/insert_form');" class="btn btn-sm btn-outline-dark">TCP 서버 추가</a>
   </div>
 </div>
 
 <table class="table table-hover table-sm">
 <thead>
 <tr>
-  <th style="text-align: center">아이디</th>
-  <th style="text-align: center">별명</th>
-  <th style="text-align: center">핸드폰</th>
+  <th style="text-align: center">TCP서버 이름</th>
+  <th style="text-align: center">IP주소</th>
+  <th style="text-align: center">PORT</th>
+  <th style="text-align: center">TIMEOUT</th>
   <th style="text-align: center">수정/삭제</th>
 </tr>
 </thead>
 <tbody>
-{{range .Admins}}
+{{range .Tcpservers}}
 <tr>
-  <td style="text-align: center">{{.Userid}}</td>
-  <td style="text-align: center">{{.Nick}}</td>
-  <td style="text-align: center">{{.Phone}}</td>
+  <td style="text-align: center">{{.Name}}</td>
+  <td style="text-align: center">{{.Ip_addr}}</td>
+  <td style="text-align: center">{{.Port}}</td>
+  <td style="text-align: center">{{.Timeout}}</td>
   <td style="text-align: center">
 		<div class="btn-group btn-group-sm">
-    <a href="javascript:show_dialog('/mgmt/admin/chg_passwd_form/{{.Id}}');" class="btn btn-sm btn-outline-dark">비밀번호변경</a>
-    <a href="javascript:show_dialog('/mgmt/admin/update_form/{{.Id}}');" class="btn btn-sm btn-outline-dark">수정</a>
-    <button onclick="delete_item('/mgmt/admin/delete/{{.Id}}')" class="btn btn-sm btn-outline-dark">삭제</button>
+    <a href="javascript:show_dialog('/mgmt/tcp_server/update_form/{{.Id}}');" class="btn btn-sm btn-outline-dark">수정</a>
+    <button onclick="delete_item('/mgmt/tcp_server/delete/{{.Id}}')" class="btn btn-sm btn-outline-dark">삭제</button>
 		</div>
   </td>
 </tr>
@@ -52,19 +53,4 @@ $(document).on('hidden.bs.modal', function (e) {
 })
 </script>
 
-<!--
-<script>
-function show_dialog(url) {
-		$('#myModal .modal-content').load(url, function(e){
-			  $('#myModal').modal('show');
-		});
-}
-
-function delete_admin(url) {
-    var result = confirm("관리자를 정말로 삭제하시겠습니까?");
-    if( result == false ) return;
-    location.href = url;
-}
-</script>
--->
 

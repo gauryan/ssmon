@@ -11,20 +11,20 @@ import (
 )
 
 
-// SELECT ID, USERID, PASSWD, NICK, PHONE FROM TB_ADMIN;
-type Admin struct {
-	Id     int
-	Userid string
-	Passwd string
-	Nick   string
-	Phone  string
+type TcpServer struct {
+	Id      int
+	Name    string
+	Ip_addr string
+	Port    int
+	Timeout int
+	Err_cnt int
 }
 
 
-// Admin 목록
-// /mgmt/admin
-func ListAdmin(c *fiber.Ctx) error {
-	var admins []Admin
+// TCP Server 목록
+// /mgmt/tcp_server
+func ListTCPServer(c *fiber.Ctx) error {
+	var tcp_servers []TcpServer
 	var flash string
 
 	session, err := store.SessionStore.Get(c)
@@ -33,7 +33,7 @@ func ListAdmin(c *fiber.Ctx) error {
     }
 
 	db := database.DBConn
-	db.Raw("CALL SP_LIST_ADMIN()").Scan(&admins)
+	db.Raw("CALL SP_LIST_TCPSERVER()").Scan(&tcp_servers)
 	// db.Raw("SELECT id, userid, passwd, nick, phone FROM TB_ADMIN").Scan(&admins)
 	// db.Raw("SELECT ID, USERID, PASSWD, NICK, PHONE FROM TB_ADMIN").Scan(&admins)
 	// 컬럼은 소문자로 써야 하며, 테이블이름은 대소문자를 가린다.
@@ -41,25 +41,28 @@ func ListAdmin(c *fiber.Ctx) error {
 	if session.Get("flash") != nil {
 		flash = fmt.Sprintf("%v", session.Get("flash"))
 		session.Delete("flash")
-	session.Save()
+		session.Save()
 	}
-	// session.Set("menu", "admin")
-	// session.Save()
+	// session.Set("menu", "tcp_server")
+    // session.Save()
 
-	data := fiber.Map{"Admins": admins, "Flash": flash, "Menu": "admin"}
-	return c.Render("mgmt/admin/index", data, "base")
+	data := fiber.Map{"Tcpservers": tcp_servers, "Flash": flash, "Menu": "tcp_server"}
+	return c.Render("mgmt/tcp_server/index", data, "base")
 }
 
 
 // 관리자 추가 폼
 // /mgmt/admin/insert_form
+/*
 func InsertFormAdmin(c *fiber.Ctx) error {
 	return c.Render("mgmt/admin/insert_form", fiber.Map{})
 }
+*/
 
 
 // 관리자 추가
 // /mgmt/admin/insert
+/*
 func InsertAdmin(c *fiber.Ctx) error {
 	userid  := c.FormValue("userid")
 	passwd1 := c.FormValue("passwd1")
@@ -83,10 +86,12 @@ func InsertAdmin(c *fiber.Ctx) error {
 
 	return c.Redirect("/mgmt/admin")
 }
+*/
 
 
 // 관리자 비밀번호변경 폼
 // /mgmt/admin/chg_passwd_form/:id
+/*
 func ChgPasswdFormAdmin(c *fiber.Ctx) error {
 	var admin Admin
 
@@ -97,10 +102,12 @@ func ChgPasswdFormAdmin(c *fiber.Ctx) error {
 	data := fiber.Map{"Admin": admin}
 	return c.Render("mgmt/admin/chg_passwd_form", data)
 }
+*/
 
 
 // 관리자 비밀번호변경
 // /mgmt/admin/chg_passwd
+/*
 func ChgPasswdAdmin(c *fiber.Ctx) error {
 	id := c.FormValue("id")
 	passwd1 := c.FormValue("passwd1")
@@ -122,10 +129,12 @@ func ChgPasswdAdmin(c *fiber.Ctx) error {
 
 	return c.Redirect("/mgmt/admin")
 }
+*/
 
 
 // 관리자 수정 폼
 // /mgmt/admin/update_form/{id}
+/*
 func UpdateFormAdmin(c *fiber.Ctx) error {
 	var admin Admin
 
@@ -136,10 +145,12 @@ func UpdateFormAdmin(c *fiber.Ctx) error {
 	data := fiber.Map{"Admin": admin}
 	return c.Render("mgmt/admin/update_form", data)
 }
+*/
 
 
 // 관리자 수정
 // /mgmt/admin/update
+/*
 func UpdateAdmin(c *fiber.Ctx) error {
 	id    := c.FormValue("id")
 	nick  := c.FormValue("nick")
@@ -158,10 +169,12 @@ func UpdateAdmin(c *fiber.Ctx) error {
 
 	return c.Redirect("/mgmt/admin")
 }
+*/
 
 
 // 관리자 삭제
 // /mgmt/admin/delete/{id}
+/*
 func DeleteAdmin(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -178,5 +191,5 @@ func DeleteAdmin(c *fiber.Ctx) error {
 
 	return c.Redirect("/mgmt/admin")
 }
-
+*/
 

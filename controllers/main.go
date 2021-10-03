@@ -35,7 +35,7 @@ func Login(c *fiber.Ctx) error {
 		session.Set("ssmon-login", true)
 		session.Save()
 
-		return c.Redirect("/mgmt/admin")
+		return c.Redirect("/mgmt/tcp_server")
 	}
 
 	return c.Redirect("/")
