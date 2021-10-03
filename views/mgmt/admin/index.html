@@ -28,7 +28,7 @@
   <td style="text-align: center">{{.Phone}} &nbsp;</td>
   <td style="text-align: center">
     <a href="javascript:show_dialog('/mgmt/admin/chg_passwd_form/{{.Id}}');" class="btn btn-sm btn-outline-dark">비밀번호변경</a>
-    <a href="/mgmt/admin/update_form/{{.Id}}" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal">수정</a>
+    <a href="javascript:show_dialog('/mgmt/admin/update_form/{{.Id}}');" class="btn btn-sm btn-outline-dark">수정</a>
     <button onclick="delete_admin('/mgmt/admin/delete/{{.Id}}')" class="btn btn-sm btn-outline-dark">삭제</button>
   </td>
 </tr>

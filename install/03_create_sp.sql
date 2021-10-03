@@ -57,4 +57,24 @@ END $$
 DELIMITER ;
 
 
+-- 관리자 수정하기
+DELIMITER $$
+CREATE PROCEDURE SP_UPDATE_ADMIN (
+	i_id INT,
+	i_nick VARCHAR(255),
+	i_phone VARCHAR(20))
+BEGIN
+	UPDATE TB_ADMIN SET nick = i_nick, phone = i_phone WHERE id = i_id;
+END $$
+DELIMITER ;
+
+
+-- 관리자 삭제하기
+DELIMITER $$
+CREATE PROCEDURE SP_DELETE_ADMIN (i_id INT)
+BEGIN
+	DELETE FROM TB_ADMIN WHERE id = i_id;
+END $$
+DELIMITER ;
+
 

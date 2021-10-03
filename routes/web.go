@@ -35,16 +35,16 @@ func Router() *fiber.App {
 	App1.Post("/login", controllers.Login)
 	App1.Get("/logout", controllers.Logout)
 
-	// App2 := app.Group("/mgmt", authSSMON) // 로그인후에만 접근가능
-	App2 := app.Group("/mgmt")
+	App2 := app.Group("/mgmt", authSSMON) // 로그인후에만 접근가능
+	// App2 := app.Group("/mgmt")
 	App2.Get("/admin", mgmt.ListAdmin)
 	App2.Get("/admin/insert_form", mgmt.InsertFormAdmin)
 	App2.Post("/admin/insert", mgmt.InsertAdmin)
 	App2.Get("/admin/chg_passwd_form/:id", mgmt.ChgPasswdFormAdmin)
 	App2.Post("/admin/chg_passwd", mgmt.ChgPasswdAdmin)
-	// App2.Get("/admin/update_form/:id", mgmt.UpdateForm)
-	// App2.Post("/admin/update", mgmt.Update)
-	// App2.Get("/admin/delete/:id", mgmt.Delete)
+	App2.Get("/admin/update_form/:id", mgmt.UpdateFormAdmin)
+	App2.Post("/admin/update", mgmt.UpdateAdmin)
+	App2.Get("/admin/delete/:id", mgmt.DeleteAdmin)
 
 	return app
 }

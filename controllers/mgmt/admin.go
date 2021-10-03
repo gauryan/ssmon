@@ -95,49 +95,41 @@ func ChgPasswdAdmin(c *fiber.Ctx) error {
 
 
 // 관리자 수정 폼
-// /admin/update_form/{id}
-/*
-func UpdateForm(c *fiber.Ctx) error {
-	type Admin struct {
-		Sno    int
-		Userid string
-		Passwd string
-		Nick   string
-	}
+// /mgmt/admin/update_form/{id}
+func UpdateFormAdmin(c *fiber.Ctx) error {
 	var admin Admin
 
 	id := c.Params("id")
 
 	db := database.DBConn
-	db.Raw("CALL getAdmin(?)", id).First(&admin)
+	db.Raw("CALL SP_GET_ADMIN(?)", id).First(&admin)
 	data := fiber.Map{"Admin": admin}
-	return c.Render("admin/update_form", data)
+	return c.Render("mgmt/admin/update_form", data)
 }
-*/
+
 
 // 관리자 수정
-// /admin/update
-/*
-func Update(c *fiber.Ctx) error {
-	id := c.FormValue("id")
-	nick := c.FormValue("nick")
+// /mgmt/admin/update
+func UpdateAdmin(c *fiber.Ctx) error {
+	id    := c.FormValue("id")
+	nick  := c.FormValue("nick")
+	phone := c.FormValue("phone")
 
 	db := database.DBConn
-	db.Exec("CALL updateAdmin(?, ?)", id, nick)
+	db.Exec("CALL SP_UPDATE_ADMIN(?, ?, ?)", id, nick, phone)
 
-	return c.Redirect("/admin")
+	return c.Redirect("/mgmt/admin")
 }
-*/
+
 
 // 관리자 삭제
-// /admin/delete/{id}
-/*
-func Delete(c *fiber.Ctx) error {
+// /mgmt/admin/delete/{id}
+func DeleteAdmin(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	db := database.DBConn
-	db.Exec("CALL deleteAdmin(?)", id)
-	return c.Redirect("/admin")
+	db.Exec("CALL SP_DELETE_ADMIN(?)", id)
+	return c.Redirect("/mgmt/admin")
 }
-*/
+
 
