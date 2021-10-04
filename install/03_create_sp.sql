@@ -86,3 +86,18 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+-- TCP서버 추가
+DELIMITER $$
+CREATE PROCEDURE SP_INSERT_TCPSERVER (
+	i_name    VARCHAR(255),
+	i_ip_addr VARCHAR(255),
+	i_port    INT,
+	i_timeout INT)
+BEGIN
+	INSERT INTO TB_TCP_SERVER(name, ip_addr, port, timeout) VALUES(i_name, i_ip_addr, i_port, i_timeout);
+END $$
+DELIMITER ;
+
+
+

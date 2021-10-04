@@ -43,50 +43,40 @@ func ListTCPServer(c *fiber.Ctx) error {
 		session.Delete("flash")
 		session.Save()
 	}
-	// session.Set("menu", "tcp_server")
-    // session.Save()
 
 	data := fiber.Map{"Tcpservers": tcp_servers, "Flash": flash, "Menu": "tcp_server"}
 	return c.Render("mgmt/tcp_server/index", data, "base")
 }
 
 
-// 관리자 추가 폼
-// /mgmt/admin/insert_form
-/*
-func InsertFormAdmin(c *fiber.Ctx) error {
-	return c.Render("mgmt/admin/insert_form", fiber.Map{})
+// TCP Server 추가 폼
+// /mgmt/tcp_server/insert_form
+func InsertFormTCPServer(c *fiber.Ctx) error {
+	return c.Render("mgmt/tcp_server/insert_form", fiber.Map{})
 }
-*/
 
 
-// 관리자 추가
-// /mgmt/admin/insert
-/*
-func InsertAdmin(c *fiber.Ctx) error {
-	userid  := c.FormValue("userid")
-	passwd1 := c.FormValue("passwd1")
-	passwd2 := c.FormValue("passwd2")
-	nick    := c.FormValue("nick")
-	phone   := c.FormValue("phone")
+// TCP Server 추가
+// /mgmt/tcp_server/insert
+func InsertTCPServer(c *fiber.Ctx) error {
+	name    := c.FormValue("name")
+	ip_addr := c.FormValue("ip_addr")
+	port    := c.FormValue("port")
+	timeout := c.FormValue("timeout")
 
 	session, err := store.SessionStore.Get(c)
     if err != nil {
         panic(err)
     }
 
-	if passwd1 != passwd2 {
-		return c.Redirect("/mgmt/admin")
-	}
 	db := database.DBConn
-	db.Exec("CALL SP_INSERT_ADMIN(?, ?, ?, ?)", userid, passwd1, nick, phone)
+	db.Exec("CALL SP_INSERT_TCPSERVER(?, ?, ?, ?)", name, ip_addr, port, timeout)
 
-	session.Set("flash", "새로운 관리자("+nick+")이 추가되었습니다.")
+	session.Set("flash", "새로운 TCP Server("+name+")이 추가되었습니다.")
 	session.Save()
 
-	return c.Redirect("/mgmt/admin")
+	return c.Redirect("/mgmt/tcp_server")
 }
-*/
 
 
 // 관리자 비밀번호변경 폼

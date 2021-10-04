@@ -13,4 +13,4 @@
 
 ### 스크린샷
 <img src="screenshots/login_form.png" width="300px" title="Login"/> 
-<img src="screenshots/list_tcpserver.png" width="500px" title="List TCP Server"/> <img src="screenshots/list_admin.png" width="500px" title="List Admin"/>
+<img src="screenshots/list_tcpserver.png" width="450px" title="List TCP Server"/> <img src="screenshots/list_admin.png" width="450px" title="List Admin"/>
