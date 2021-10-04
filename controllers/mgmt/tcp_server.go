@@ -118,10 +118,9 @@ func UpdateTCPServer(c *fiber.Ctx) error {
 }
 
 
-// 관리자 삭제
+// TCP Server 삭제
 // /mgmt/admin/delete/{id}
-/*
-func DeleteAdmin(c *fiber.Ctx) error {
+func DeleteTCPServer(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	session, err := store.SessionStore.Get(c)
@@ -130,12 +129,11 @@ func DeleteAdmin(c *fiber.Ctx) error {
     }
 
 	db := database.DBConn
-	db.Exec("CALL SP_DELETE_ADMIN(?)", id)
+	db.Exec("CALL SP_DELETE_TCPSERVER(?)", id)
 
-	session.Set("flash", "관리자가 삭제되었습니다.")
+	session.Set("flash", "TCP서버가 삭제되었습니다.")
     session.Save()
 
-	return c.Redirect("/mgmt/admin")
+	return c.Redirect("/mgmt/tcp_server")
 }
-*/
 

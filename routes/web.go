@@ -51,6 +51,7 @@ func Router() *fiber.App {
 	App2.Post("/tcp_server/insert", mgmt.InsertTCPServer)
 	App2.Get("/tcp_server/update_form/:id", mgmt.UpdateFormTCPServer)
 	App2.Post("/tcp_server/update", mgmt.UpdateTCPServer)
+	App2.Get("/tcp_server/delete/:id", mgmt.DeleteTCPServer)
 
 	return app
 }
