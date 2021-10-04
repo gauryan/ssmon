@@ -37,14 +37,15 @@
         <div class="nav list-group flex-column" style="text-align: left">
 				-->
         <div class="list-group" style="text-align: left">
-          <a class="list-group-item list-group-item-action {{if eq .Menu "tcp_server"}}active{{end}}" href="/mgmt/tcp_server"> TCP 서버 관리 </a>
-          <a class="list-group-item list-group-item-action {{if eq .Menu "tcp_monitor"}}active{{end}}" href="/mgmt/tcp_monitor"> TCP 서버 모니터링</a>
-          <a class="list-group-item list-group-item-action" href="/mgmt/http_server"> HTTP 서버 관리</a>
-          <a class="list-group-item list-group-item-action" href="/mgmt/http_monitor"> HTTP 서버 모니터링</a>
-          <a class="list-group-item list-group-item-action" href="/mgmt/ping_server"> PING 서버 관리</a>
-          <a class="list-group-item list-group-item-action" href="/mgmt/ping_monitor"> PING 서버 모니터링</a>
+          <a class="list-group-item list-group-item-action {{if eq .Menu "tcp_server"}}active{{end}}" href="/mgmt/tcp_server">TCP 서버 관리 </a>
+          <a class="list-group-item list-group-item-action {{if eq .Menu "tcp_monitor"}}active{{end}}" href="/mgmt/tcp_monitor">TCP 서버 모니터링</a>
+          <a class="list-group-item list-group-item-action" href="/mgmt/http_server">HTTP 서버 관리</a>
+          <a class="list-group-item list-group-item-action" href="/mgmt/http_monitor">HTTP 서버 모니터링</a>
+          <a class="list-group-item list-group-item-action" href="/mgmt/ping_server">PING 서버 관리</a>
+          <a class="list-group-item list-group-item-action" href="/mgmt/ping_monitor">PING 서버 모니터링</a>
 					<a class="list-group-item list-group-item-action {{if eq .Menu "admin"}}active{{end}}" href="/mgmt/admin">관리자</a>
-          <a class="list-group-item list-group-item-action" href="/mgmt/setting"> 설정</a>
+					<a class="list-group-item list-group-item-action {{if eq .Menu "errlog"}}active{{end}}" href="/mgmt/errlog">장애로그</a>
+          <a class="list-group-item list-group-item-action" href="/mgmt/setting">설정</a>
         </div>
       </div>
     </nav>
