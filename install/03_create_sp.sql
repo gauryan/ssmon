@@ -1,3 +1,13 @@
+-- 설정 목록
+DELIMITER $$
+CREATE PROCEDURE SP_LIST_SETTING()
+BEGIN
+    SELECT id, code, name, value, type FROM TB_SETTING;
+END $$
+DELIMITER ;
+
+
+
 -- 관리자 목록
 DELIMITER $$
 CREATE PROCEDURE SP_LIST_ADMIN()

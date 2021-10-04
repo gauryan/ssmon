@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">설정</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+		<!--
+    <a href="/mgmt/admin/insert_form" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal">관리자 추가</a>
+		<a href="javascript:$('#myModal .modal-content').load('/mgmt/admin/insert_form',function(e){$('#myModal').modal('show');});" class="btn btn-sm btn-outline-dark">관리자 추가</a>
+		검색어 : bootstrap modal load dynamic content
+		https://stackoverflow.com/questions/21863462/bootstrap-modal-dynamic-content
+		-->
+		<a href="#" class="btn btn-sm btn-outline-dark">설정 저장</a>
+  </div>
+</div>
+
+<table class="table table-hover table-sm">
+<thead>
+<tr>
+  <th style="text-align: center">코드</th>
+  <th style="text-align: center">설정이름</th>
+  <th style="text-align: center">값</th>
+  <th style="text-align: center">TYPE</th>
+</tr>
+</thead>
+<tbody>
+{{range .Settings}}
+<tr>
+  <td style="text-align: center">{{.Code}}</td>
+  <td style="text-align: center">{{.Name}}</td>
+  <td style="text-align: center">
+		{{if eq .Type "TEXT"}}
+		<input type="text" name="{{.Code}}" value="{{.Value}}">
+		{{else}}
+		{{.Value}}
+		{{end}}
+	</td>
+  <td style="text-align: center">{{.Type}}</td>
+</tr>
+{{end}}
+</tbody>
+</table>
+ 
+<!--
+<script>
+function delete_admin(url) {
+    var result = confirm("관리자를 정말로 삭제하시겠습니까?");
+    if( result == false ) return;
+    location.href = url;
+}
+</script>
+-->
+
