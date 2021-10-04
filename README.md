@@ -12,4 +12,4 @@
   * Slack 알림
 
 ### 스크린샷
-<img src="screenshots/list_monitor.png" width="450px" title="TCP Server Monitor"/>
+<img src="screenshots/tcp_monitor.png" width="450px" title="TCP Server Monitor"/>
