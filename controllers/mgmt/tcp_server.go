@@ -8,6 +8,7 @@ import (
 	"github.com/gauryan/ssmon/database"
 	"github.com/gofiber/fiber/v2"
 	"fmt"
+	// "strconv"
 )
 
 
@@ -79,72 +80,28 @@ func InsertTCPServer(c *fiber.Ctx) error {
 }
 
 
-// 관리자 비밀번호변경 폼
-// /mgmt/admin/chg_passwd_form/:id
-/*
-func ChgPasswdFormAdmin(c *fiber.Ctx) error {
-	var admin Admin
+// TCP Server 수정 폼
+// /mgmt/tcp_server/update_form/{id}
+func UpdateFormTCPServer(c *fiber.Ctx) error {
+	var tcp_server TcpServer
 
 	id := c.Params("id")
 
 	db := database.DBConn
-	db.Raw("CALL SP_GET_ADMIN(?)", id).First(&admin)
-	data := fiber.Map{"Admin": admin}
-	return c.Render("mgmt/admin/chg_passwd_form", data)
+	db.Raw("CALL SP_GET_TCPSERVER(?)", id).First(&tcp_server)
+	data := fiber.Map{"TCPServer": tcp_server}
+	return c.Render("mgmt/tcp_server/update_form", data)
 }
-*/
 
 
-// 관리자 비밀번호변경
-// /mgmt/admin/chg_passwd
-/*
-func ChgPasswdAdmin(c *fiber.Ctx) error {
-	id := c.FormValue("id")
-	passwd1 := c.FormValue("passwd1")
-	passwd2 := c.FormValue("passwd2")
-
-	session, err := store.SessionStore.Get(c)
-    if err != nil {
-        panic(err)
-    }
-
-	if passwd1 != passwd2 {
-		return c.Redirect("/mgmt/admin")
-	}
-	db := database.DBConn
-	db.Exec("CALL SP_UPDATE_ADMIN_PASSWD(?, ?)", id, passwd1)
-
-	session.Set("flash", "관리자 비밀번호가 변경되었습니다.")
-    session.Save()
-
-	return c.Redirect("/mgmt/admin")
-}
-*/
-
-
-// 관리자 수정 폼
-// /mgmt/admin/update_form/{id}
-/*
-func UpdateFormAdmin(c *fiber.Ctx) error {
-	var admin Admin
-
-	id := c.Params("id")
-
-	db := database.DBConn
-	db.Raw("CALL SP_GET_ADMIN(?)", id).First(&admin)
-	data := fiber.Map{"Admin": admin}
-	return c.Render("mgmt/admin/update_form", data)
-}
-*/
-
-
-// 관리자 수정
-// /mgmt/admin/update
-/*
-func UpdateAdmin(c *fiber.Ctx) error {
-	id    := c.FormValue("id")
-	nick  := c.FormValue("nick")
-	phone := c.FormValue("phone")
+// TCP Server 수정
+// /mgmt/tcp_server/update
+func UpdateTCPServer(c *fiber.Ctx) error {
+	id      := c.FormValue("id")
+	name    := c.FormValue("name")
+	ip_addr := c.FormValue("ip_addr")
+	port    := c.FormValue("port")
+	timeout := c.FormValue("timeout")
 
 	session, err := store.SessionStore.Get(c)
     if err != nil {
@@ -152,14 +109,13 @@ func UpdateAdmin(c *fiber.Ctx) error {
     }
 
 	db := database.DBConn
-	db.Exec("CALL SP_UPDATE_ADMIN(?, ?, ?)", id, nick, phone)
+	db.Exec("CALL SP_UPDATE_TCPSERVER(?, ?, ?, ?, ?)", id, name, ip_addr, port, timeout)
 
-	session.Set("flash", "관리자("+nick+")가 수정되었습니다.")
+	session.Set("flash", "TCP서버("+name+")가 수정되었습니다.")
     session.Save()
 
-	return c.Redirect("/mgmt/admin")
+	return c.Redirect("/mgmt/tcp_server")
 }
-*/
 
 
 // 관리자 삭제

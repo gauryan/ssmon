@@ -100,4 +100,28 @@ END $$
 DELIMITER ;
 
 
+-- TCP서버 1개 가져오기
+DELIMITER $$
+CREATE PROCEDURE SP_GET_TCPSERVER (i_id INT)
+BEGIN
+	SELECT id, name, ip_addr, port, timeout FROM TB_TCP_SERVER WHERE id = i_id LIMIT 1;
+END $$
+DELIMITER ;
+
+
+-- TCC서버 수정하기
+DELIMITER $$
+CREATE PROCEDURE SP_UPDATE_TCPSERVER (
+    i_id INT,
+    i_name VARCHAR(255),
+    i_ip_addr VARCHAR(255),
+	i_port INT,
+	i_timeout INT )
+BEGIN
+    UPDATE TB_TCP_SERVER SET name = i_name, ip_addr = i_ip_addr, port = i_port, timeout = i_timeout WHERE id = i_id;
+END $$
+DELIMITER ;
+
+
+
 
