@@ -78,6 +78,15 @@ END $$
 DELIMITER ;
 
 
+-- TCP서버 모니터링
+DELIMITER $$
+CREATE PROCEDURE SP_MONITOR_TCPSERVER()
+BEGIN
+    SELECT id, name, ip_addr, port, timeout, err_cnt FROM TB_TCP_SERVER order by err_cnt desc;
+END $$
+DELIMITER ;
+
+
 -- TCP서버 목록
 DELIMITER $$
 CREATE PROCEDURE SP_LIST_TCPSERVER()
