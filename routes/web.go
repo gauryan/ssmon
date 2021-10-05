@@ -39,6 +39,7 @@ func Router() *fiber.App {
 	App2 := app.Group("/mgmt")
 
 	App2.Get("/setting", mgmt.ViewSetting)
+	App2.Post("/setting/update", mgmt.UpdateSetting)
 
 	App2.Get("/admin", mgmt.ListAdmin)
 	App2.Get("/admin/insert_form", mgmt.InsertFormAdmin)

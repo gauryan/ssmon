@@ -7,36 +7,133 @@
 		검색어 : bootstrap modal load dynamic content
 		https://stackoverflow.com/questions/21863462/bootstrap-modal-dynamic-content
 		-->
-		<a href="#" class="btn btn-sm btn-outline-dark">설정 저장</a>
   </div>
 </div>
 
+<form name="update_form" action="/mgmt/setting/update" method="post">
 <table class="table table-hover table-sm">
 <thead>
 <tr>
-  <th style="text-align: center">코드</th>
   <th style="text-align: center">설정이름</th>
   <th style="text-align: center">값</th>
-  <th style="text-align: center">TYPE</th>
 </tr>
 </thead>
 <tbody>
-{{range .Settings}}
 <tr>
-  <td style="text-align: center">{{.Code}}</td>
-  <td style="text-align: center">{{.Name}}</td>
+	<td style="text-align: center">장애알림 사용여부</td>
   <td style="text-align: center">
-		{{if eq .Type "TEXT"}}
-		<input type="text" name="{{.Code}}" value="{{.Value}}">
-		{{else}}
-		{{.Value}}
-		{{end}}
+		<select class="form-control form-control-sm" name="ALARM_USE_YN">
+			{{ range .Settings }}
+			  {{ if eq .Code "ALARM_USE_YN" }}
+				  {{ if eq .Value "Y" }}
+			<option value="Y" selected>사용</option>
+			<option value="N">미사용</option>
+					{{ else }}
+			<option value="Y">사용</option>
+			<option value="N" selected>미사용</option>
+					{{ end }}
+				{{ end }}
+			{{ end }}
+		</select>
 	</td>
-  <td style="text-align: center">{{.Type}}</td>
 </tr>
-{{end}}
+<tr>
+  <td style="text-align: center">알림을 위한 장애횟수</td>
+  <td style="text-align: center">
+    {{ range .Settings }}
+      {{ if eq .Code "ERR_CNT_FOR_ALARM" }}
+    <input type="number" class="form-control form-control-sm" min='1' max='30' name="ERR_CNT_FOR_ALARM" value="{{ .Value }}">
+      {{ end }}
+    {{ end }}
+	</td>
+</tr>
+<tr>
+  <td style="text-align: center">Slack 사용여부</td>
+  <td style="text-align: center">
+		<select class="form-control form-control-sm" name="SLACK_USE_YN">
+      {{ range .Settings }}
+        {{ if eq .Code "SLACK_USE_YN" }}
+          {{ if eq .Value "Y" }}
+      <option value="Y" selected>사용</option>
+      <option value="N">미사용</option>
+          {{ else }}
+      <option value="Y">사용</option>
+      <option value="N" selected>미사용</option>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+		</select>
+	</td>
+</tr>
+<tr>
+  <td style="text-align: center">Slack 채널</td>
+  <td style="text-align: center">
+    {{ range .Settings }}
+      {{ if eq .Code "SLACK_CHANEL" }}
+		<input type="text" class="form-control form-control-sm" name="SLACK_CHANEL" value="{{ .Value }}">
+      {{ end }}
+    {{ end }}
+	</td>
+</tr>
+<tr>
+  <td style="text-align: center">Slack 토큰</td>
+  <td style="text-align: center">
+    {{ range .Settings }}
+      {{ if eq .Code "SLACK_TOKEN" }}
+		<input type="text" class="form-control form-control-sm" name="SLACK_TOKEN" value="{{ .Value }}">
+      {{ end }}
+    {{ end }}
+	</td>
+</tr>
+<tr>
+  <td style="text-align: center">Slack 사용자이름</td>
+  <td style="text-align: center">
+    {{ range .Settings }}
+      {{ if eq .Code "SLACK_USERNAME" }}
+		<input type="text" class="form-control form-control-sm" name="SLACK_USERNAME" value="{{ .Value }}">
+      {{ end }}
+    {{ end }}
+	</td>
+</tr>
+<tr>
+  <td style="text-align: center">Slack 이미지 URL</td>
+  <td style="text-align: center">
+    {{ range .Settings }}
+      {{ if eq .Code "SLACK_IMAGE" }}
+		<input type="text" class="form-control form-control-sm" name="SLACK_IMAGE" value="{{ .Value }}">
+      {{ end }}
+    {{ end }}
+	</td>
+</tr>
+<tr>
+  <td style="text-align: center">장애로그 저장일</td>
+  <td style="text-align: center">
+		<select class="form-control form-control-sm" name="ERR_LOG_SAVE_DAYS">
+      {{ range .Settings }}
+        {{ if eq .Code "ERR_LOG_SAVE_DAYS" }}
+          {{ if eq .Value "30" }}
+      <option value="30" selected>30일</option>
+      <option value="60">60일</option>
+      <option value="90">90일</option>
+          {{ else if eq .Value "60" }}
+      <option value="30">30일</option>
+      <option value="60" selected>60일</option>
+      <option value="90">90일</option>
+          {{ else if eq .Value "90" }}
+      <option value="30">30일</option>
+      <option value="60">60일</option>
+      <option value="90" selected>90일</option>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+		</select>
+
+	</td>
+</tr>
 </tbody>
 </table>
+<input type="submit" class="btn btn-sm btn-outline-dark" value="설정 저장">
+</form>
  
 <!--
 <script>

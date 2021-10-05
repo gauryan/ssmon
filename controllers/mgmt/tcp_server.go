@@ -8,7 +8,7 @@ import (
 	"github.com/gauryan/ssmon/database"
 	"github.com/gofiber/fiber/v2"
 	"fmt"
-	// "strconv"
+	"strconv"
 )
 
 
@@ -24,15 +24,21 @@ type TcpServer struct {
 // TCP Server 모니터링
 // /mgmt/tcp_monitor
 func MonitorTCPServer(c *fiber.Ctx) error {
+	type Result struct {
+		Value string
+	}
+	var result Result
 	var tcp_servers []TcpServer
 
 	db := database.DBConn
 	db.Raw("CALL SP_MONITOR_TCPSERVER()").Scan(&tcp_servers)
+	db.Raw("CALL SP_GET_ERR_CNT_FOR_ALARM()").First(&result)
+	err_cnt_for_alarm, _ := strconv.Atoi(result.Value)
 	// db.Raw("SELECT id, userid, passwd, nick, phone FROM TB_ADMIN").Scan(&admins)
 	// db.Raw("SELECT ID, USERID, PASSWD, NICK, PHONE FROM TB_ADMIN").Scan(&admins)
 	// 컬럼은 소문자로 써야 하며, 테이블이름은 대소문자를 가린다.
 
-	data := fiber.Map{"Tcpservers": tcp_servers, "Menu": "tcp_monitor"}
+	data := fiber.Map{"Tcpservers": tcp_servers, "Errcnt4alarm": err_cnt_for_alarm, "Menu": "tcp_monitor"}
 	return c.Render("mgmt/tcp_server/monitor", data, "base")
 }
 

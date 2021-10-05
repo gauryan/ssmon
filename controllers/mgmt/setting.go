@@ -17,12 +17,12 @@ type Setting struct {
 	Code  string
 	Name  string
 	Value string
-	Type  string
+	Memo  string
 }
 
 
 // Setting 메인화면
-// /mgmt/settingn
+// /mgmt/setting
 func ViewSetting(c *fiber.Ctx) error {
 	var settings []Setting
 	var flash string
@@ -146,13 +146,17 @@ func UpdateFormAdmin(c *fiber.Ctx) error {
 */
 
 
-// 관리자 수정
-// /mgmt/admin/update
-/*
-func UpdateAdmin(c *fiber.Ctx) error {
-	id    := c.FormValue("id")
-	nick  := c.FormValue("nick")
-	phone := c.FormValue("phone")
+// Setting 수정
+// /mgmt/setting/update
+func UpdateSetting(c *fiber.Ctx) error {
+	aa := c.FormValue("ALARM_USE_YN")
+	bb := c.FormValue("ERR_CNT_FOR_ALARM")
+	cc := c.FormValue("SLACK_USE_YN")
+	dd := c.FormValue("SLACK_CHANEL")
+	ee := c.FormValue("SLACK_TOKEN")
+	ff := c.FormValue("SLACK_USERNAME")
+	gg := c.FormValue("SLACK_IMAGE")
+	hh := c.FormValue("ERR_LOG_SAVE_DAYS")
 
 	session, err := store.SessionStore.Get(c)
     if err != nil {
@@ -160,14 +164,13 @@ func UpdateAdmin(c *fiber.Ctx) error {
     }
 
 	db := database.DBConn
-	db.Exec("CALL SP_UPDATE_ADMIN(?, ?, ?)", id, nick, phone)
+	db.Exec("CALL SP_UPDATE_SETTING(?, ?, ?, ?, ?, ?, ?, ?)", aa, bb, cc, dd, ee, ff, gg, hh)
 
-	session.Set("flash", "관리자("+nick+")가 수정되었습니다.")
+	session.Set("flash", "설정이 저장되었습니다.")
     session.Save()
 
-	return c.Redirect("/mgmt/admin")
+	return c.Redirect("/mgmt/setting")
 }
-*/
 
 
 // 관리자 삭제

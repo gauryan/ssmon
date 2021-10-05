@@ -2,7 +2,6 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">TCP 서버 모니터링</h1>
 </div>
-
 <table class="table table-hover table-sm">
 <thead>
 <tr>
@@ -14,8 +13,9 @@
 </tr>
 </thead>
 <tbody>
+{{ $errcnt4alarm := .Errcnt4alarm }} 
 {{range .Tcpservers}}
-<tr {{if ge .Err_cnt 3}}style="background-color: orange;"{{else if ge .Err_cnt 1}}style="color: red;"{{end}}>
+<tr {{if ge .Err_cnt $errcnt4alarm}}style="background-color: orange;"{{else if ge .Err_cnt 1}}style="color: red;"{{end}}>
   <td style="text-align: center">{{.Name}}</td>
   <td style="text-align: center">{{.Ip_addr}}</td>
   <td style="text-align: center">{{.Port}}</td>
