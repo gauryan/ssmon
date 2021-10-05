@@ -1,3 +1,6 @@
+check/check_tcp
+check/check_http
+check/check_ping
 web/logs
 web/tmp
 web/server.pid
