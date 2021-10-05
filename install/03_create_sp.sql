@@ -35,8 +35,26 @@ END $$
 DELIMITER ;
 
 
+
 --
--- 알림을 위한 장애횟수 (ERR_CNT_FOR_ALARM) 가져오기
+-- 장애 로그 기록
+--
+DELIMITER $$
+CREATE PROCEDURE SP_INSERT_ERR_LOG (
+	i_service VARCHAR(255),
+	i_name VARCHAR(255),
+	i_ip_addr VARCHAR(20),
+	i_port VARCHAR(10),
+	i_url VARCHAR(255))
+BEGIN
+	INSERT INTO TB_ERR_LOGR(service, name, ip_addr, port, url) VALUES(i_service, i_name, i_ip_addr, i_port, i_url);
+END $$
+DELIMITER ;
+
+
+
+--
+-- 알림을 위한 실패횟수 (ERR_CNT_FOR_ALARM) 가져오기
 --
 DELIMITER $$
 CREATE PROCEDURE SP_GET_ERR_CNT_FOR_ALARM()
@@ -192,4 +210,17 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+
+--
+-- TCP_SERVER의 ERR_CNT (실패횟수) 변경
+--
+DELIMITER $$
+CREATE PROCEDURE ssmon.SP_UPDATE_TCP_SERVER_ERR_CNT(
+	i_id BIGINT,
+	i_err_cnt INT)
+BEGIN
+	UPDATE TB_TCP_SERVER SET err_cnt = i_err_cnt WHERE id = i_id;
+END $$
+DELIMITER ;
 

@@ -10,15 +10,15 @@
     </div>
     <div style="text-align: left; padding-bottom: 10px;">
       <label >IP주소 <small>(필수)</small></label>
-      <input type="text" name="ip_addr" class="form-control" required>
+      <input type="text" name="ip_addr" class="form-control" pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" required>
     </div>
     <div style="text-align: left; padding-bottom: 10px;">
       <label>PORT <small>(필수)</small></label>
-      <input type="text" name="port" class="form-control" required>
+      <input type="number" min="1" max="65000" name="port" class="form-control" required>
     </div>
     <div style="text-align: left; padding-bottom: 10px;">
       <label>TIMEOUT <small>(필수, ms)</small></label>
-      <input type="text" name="timeout" value="300" class="form-control" required>
+      <input type="number" min="10" max="10000" name="timeout" value="300" class="form-control" required>
     </div>
 		<br>
     <div style="text-align: right">

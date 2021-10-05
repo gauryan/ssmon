@@ -14,6 +14,7 @@ import (
 
 type TcpServer struct {
 	Id      int
+	Enabled int
 	Name    string
 	Ip_addr string
 	Port    int
@@ -116,6 +117,26 @@ func UpdateFormTCPServer(c *fiber.Ctx) error {
 }
 
 
+// TCP Server Enabled 상태 토글하기
+// /mgmt/tcp_server/toggle_enabled/{id}
+func ToggleEnabledTCPServer(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	session, err := store.SessionStore.Get(c)
+    if err != nil {
+        panic(err)
+    }
+
+	db := database.DBConn
+	db.Exec("CALL SP_TOGGLE_ENABLED_TCPSERVER(?)", id)
+
+	session.Set("flash", "TCP서버상태가 토글되었습니다.")
+    session.Save()
+
+	return c.Redirect("/mgmt/tcp_server")
+}
+
+
 // TCP Server 수정
 // /mgmt/tcp_server/update
 func UpdateTCPServer(c *fiber.Ctx) error {
@@ -141,7 +162,7 @@ func UpdateTCPServer(c *fiber.Ctx) error {
 
 
 // TCP Server 삭제
-// /mgmt/admin/delete/{id}
+// /mgmt/tcp_server/delete/{id}
 func DeleteTCPServer(c *fiber.Ctx) error {
 	id := c.Params("id")
 
