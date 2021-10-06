@@ -152,7 +152,7 @@ func UpdateSetting(c *fiber.Ctx) error {
 	aa := c.FormValue("ALARM_USE_YN")
 	bb := c.FormValue("ERR_CNT_FOR_ALARM")
 	cc := c.FormValue("SLACK_USE_YN")
-	dd := c.FormValue("SLACK_CHANEL")
+	dd := c.FormValue("SLACK_CHANNEL")
 	ee := c.FormValue("SLACK_TOKEN")
 	ff := c.FormValue("SLACK_USERNAME")
 	gg := c.FormValue("SLACK_IMAGE")

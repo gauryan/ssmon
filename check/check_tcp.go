@@ -5,6 +5,7 @@ import (
 	"net"
 	"time"
 	"os"
+	"flag"
 	"strconv"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -20,29 +21,60 @@ type TcpServer struct {
 	Err_cnt int
 }
 
+type Setting struct {
+	Id    int
+	Code  string
+	Name  string
+	Value string
+	Memo  string
+}
+
 type Result struct {
 	Value string
 }
 
 func main() {
 	var tcp_servers []TcpServer
-	var result Result
+	var settings []Setting
+	// var result Result
 	var err_cnt int
 
+	var err_cnt_for_alarm int
+	var alarm_use_yn string
+	var slack_use_yn string
+
+
 	// .env 불러오기
-	err_dot := godotenv.Load("../.env")
+	env := flag.String("e", "/home/ubuntu/ssmon/.env", ".env 파일")
+	// env := flag.String("e", "/home/ubuntu/project/ssmon/.env", ".env 파일")
+	flag.Parse()
+	err_dot := godotenv.Load(*env)
 	if err_dot != nil {
-        panic("Error loading .env file")
+        fmt.Println("Error loading .env file")
+		fmt.Println("'check_tcp -e .env파일경로'")
+		return
     }
 
 	// DB 연결
 	dsn := ""+os.Getenv("DB_USERNAME")+":"+os.Getenv("DB_PASSWORD")+"@tcp("+os.Getenv("DB_HOST")+":"+os.Getenv("DB_PORT")+")/"+os.Getenv("DB_DATABASE")
 	DBConn, err_gorm := gorm.Open(mysql.Open(dsn), &gorm.Config{})
     if err_gorm != nil {
-        panic("failed to connect database")
+        fmt.Println("failed to connect database")
+		return
     }
-	DBConn.Raw("CALL SP_GET_ERR_CNT_FOR_ALARM()").First(&result)
-	err_cnt_for_alarm, _ := strconv.Atoi(result.Value)
+	// 알림설정 구하기
+	DBConn.Raw("CALL SP_LIST_SETTING()").First(&settings)
+	for _, setting := range settings {
+		if setting.Code == "ERR_CNT_FOR_ALARM" {
+			err_cnt_for_alarm, _ = strconv.Atoi(setting.Value)
+		}
+		if setting.Code == "ALARM_USE_YN" {
+			alarm_use_yn = setting.Value
+		}
+		if setting.Code == "SLACK_USE_YN" {
+			slack_use_yn = setting.Value
+		}
+	}
 
 
 	DBConn.Raw("CALL SP_MONITOR_TCPSERVER()").Scan(&tcp_servers)
@@ -58,6 +90,11 @@ func main() {
 				// 장애 로그/알림 남긴다
 				// service, err_rec_gubun, name, ip_addr, port, url
 				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "장애", ts.Name, ts.Ip_addr, ts.Port, "")
+				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
+				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
+					msg := "[장애] [TCP] "+ts.Name+" "+ts.Ip_addr+":"+strconv.Itoa(ts.Port)
+					send_slack(&settings, msg)
+				}
 				fmt.Println("장애 로그/알림")
 			}
 		} else {
@@ -71,6 +108,11 @@ func main() {
 				DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 				// 복구 로그/알림 남긴다
 				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "복구", ts.Name, ts.Ip_addr, ts.Port, "")
+				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
+				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
+					msg := "[복구] [TCP] "+ts.Name+" "+ts.Ip_addr+":"+strconv.Itoa(ts.Port)
+					send_slack(&settings, msg)
+				}
 				fmt.Println("복구 로그/알림")
 			} else if ts.Err_cnt != 0 && ts.Err_cnt < err_cnt_for_alarm {
 				err_cnt = 0
@@ -78,4 +120,37 @@ func main() {
 			}
 		}
 	}
+}
+
+
+// Send Slack Message
+func send_slack(settings *[]Setting, msg string) {
+	var slack_channel  string
+	var slack_token    string
+	var slack_username string
+	var slack_image    string
+
+	for _, setting := range *settings {
+		if setting.Code == "SLACK_CHANNEL" {
+			slack_channel = setting.Value
+		}
+		if setting.Code == "SLACK_TOKEN" {
+			slack_token = setting.Value
+		}
+		if setting.Code == "SLACK_USERNAME" {
+			slack_username = setting.Value
+		}
+		if setting.Code == "SLACK_IMAGE" {
+			slack_image = setting.Value
+		}
+	}
+
+	_ = slack_channel
+	_ = slack_token
+	_ = slack_username
+	_ = slack_image
+
+	//
+	// 실제로 SLACK 메시지 보낸다.
+	//
 }

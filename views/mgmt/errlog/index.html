@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">장애/복구 로그</h1>
+</div>
+
+<table class="table table-hover table-sm">
+<thead>
+<tr>
+  <th style="text-align: center">시간</th>
+  <th style="text-align: center">장애/복구</th>
+  <th style="text-align: center">서비스</th>
+  <th style="text-align: center">서버이름</th>
+  <th style="text-align: center">IP주소</th>
+  <th style="text-align: center">PORT</th>
+  <th style="text-align: center">URL</th>
+</tr>
+</thead>
+<tbody>
+{{range .Errlogs}}
+<tr>
+  <td style="text-align: center">{{.Err_time}}</td>
+  <td style="text-align: center">{{.Err_rec_gubun}}</td>
+  <td style="text-align: center">{{.Service}}</td>
+  <td style="text-align: center">{{.Name}}</td>
+  <td style="text-align: center">{{.Ip_addr}}</td>
+  <td style="text-align: center">{{.Port}}</td>
+  <td style="text-align: center">{{.Url}}</td>
+</tr>
+{{end}}
+</tbody>
+</table>
+{{ .Pagination }}

@@ -69,8 +69,8 @@
   <td style="text-align: center">Slack 채널</td>
   <td style="text-align: center">
     {{ range .Settings }}
-      {{ if eq .Code "SLACK_CHANEL" }}
-		<input type="text" class="form-control form-control-sm" name="SLACK_CHANEL" value="{{ .Value }}">
+      {{ if eq .Code "SLACK_CHANNEL" }}
+		<input type="text" class="form-control form-control-sm" name="SLACK_CHANNEL" value="{{ .Value }}">
       {{ end }}
     {{ end }}
 	</td>
