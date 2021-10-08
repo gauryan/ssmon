@@ -1,3 +1,6 @@
+ssmon
+application
+nohup.out
 check/check_tcp
 check/check_http
 check/check_ping

@@ -76,7 +76,7 @@
 	</td>
 </tr>
 <tr>
-  <td style="text-align: center">Slack 토큰</td>
+  <td style="text-align: center">Slack Webhook URL</td>
   <td style="text-align: center">
     {{ range .Settings }}
       {{ if eq .Code "SLACK_TOKEN" }}
@@ -96,52 +96,16 @@
 	</td>
 </tr>
 <tr>
-  <td style="text-align: center">Slack 이미지 URL</td>
-  <td style="text-align: center">
-    {{ range .Settings }}
-      {{ if eq .Code "SLACK_IMAGE" }}
-		<input type="text" class="form-control form-control-sm" name="SLACK_IMAGE" value="{{ .Value }}">
-      {{ end }}
-    {{ end }}
-	</td>
-</tr>
-<tr>
   <td style="text-align: center">장애로그 저장일</td>
   <td style="text-align: center">
-		<select class="form-control form-control-sm" name="ERR_LOG_SAVE_DAYS">
-      {{ range .Settings }}
-        {{ if eq .Code "ERR_LOG_SAVE_DAYS" }}
-          {{ if eq .Value "30" }}
-      <option value="30" selected>30일</option>
-      <option value="60">60일</option>
-      <option value="90">90일</option>
-          {{ else if eq .Value "60" }}
-      <option value="30">30일</option>
-      <option value="60" selected>60일</option>
-      <option value="90">90일</option>
-          {{ else if eq .Value "90" }}
-      <option value="30">30일</option>
-      <option value="60">60일</option>
-      <option value="90" selected>90일</option>
-          {{ end }}
-        {{ end }}
+    {{ range .Settings }}
+      {{ if eq .Code "ERR_LOG_SAVE_DAYS" }}
+		<input type="number" min="30" max="1000" class="form-control form-control-sm" name="ERR_LOG_SAVE_DAYS" value="{{ .Value }}">
       {{ end }}
-		</select>
-
+    {{ end }}
 	</td>
 </tr>
 </tbody>
 </table>
 <input type="submit" class="btn btn-sm btn-outline-dark" value="설정 저장">
 </form>
- 
-<!--
-<script>
-function delete_admin(url) {
-    var result = confirm("관리자를 정말로 삭제하시겠습니까?");
-    if( result == false ) return;
-    location.href = url;
-}
-</script>
--->
-

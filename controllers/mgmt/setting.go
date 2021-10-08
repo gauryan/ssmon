@@ -155,8 +155,7 @@ func UpdateSetting(c *fiber.Ctx) error {
 	dd := c.FormValue("SLACK_CHANNEL")
 	ee := c.FormValue("SLACK_TOKEN")
 	ff := c.FormValue("SLACK_USERNAME")
-	gg := c.FormValue("SLACK_IMAGE")
-	hh := c.FormValue("ERR_LOG_SAVE_DAYS")
+		gg := c.FormValue("ERR_LOG_SAVE_DAYS")
 
 	session, err := store.SessionStore.Get(c)
     if err != nil {
@@ -164,7 +163,7 @@ func UpdateSetting(c *fiber.Ctx) error {
     }
 
 	db := database.DBConn
-	db.Exec("CALL SP_UPDATE_SETTING(?, ?, ?, ?, ?, ?, ?, ?)", aa, bb, cc, dd, ee, ff, gg, hh)
+	db.Exec("CALL SP_UPDATE_SETTING(?, ?, ?, ?, ?, ?, ?)", aa, bb, cc, dd, ee, ff, gg)
 
 	session.Set("flash", "설정이 저장되었습니다.")
     session.Save()

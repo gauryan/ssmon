@@ -1,15 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"net"
-	"time"
-	"os"
 	"flag"
-	"strconv"
+	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"net"
+	"os"
+	"strconv"
+	"time"
+	"github.com/slack-go/slack"
 )
 
 type TcpServer struct {
@@ -43,25 +44,24 @@ func main() {
 	var alarm_use_yn string
 	var slack_use_yn string
 
-
 	// .env 불러오기
 	env := flag.String("e", "/home/ubuntu/ssmon/.env", ".env 파일")
 	// env := flag.String("e", "/home/ubuntu/project/ssmon/.env", ".env 파일")
 	flag.Parse()
 	err_dot := godotenv.Load(*env)
 	if err_dot != nil {
-        fmt.Println("Error loading .env file")
+		fmt.Println("Error loading .env file")
 		fmt.Println("'check_tcp -e .env파일경로'")
 		return
-    }
+	}
 
 	// DB 연결
-	dsn := ""+os.Getenv("DB_USERNAME")+":"+os.Getenv("DB_PASSWORD")+"@tcp("+os.Getenv("DB_HOST")+":"+os.Getenv("DB_PORT")+")/"+os.Getenv("DB_DATABASE")
+	dsn := "" + os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT") + ")/" + os.Getenv("DB_DATABASE")
 	DBConn, err_gorm := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-    if err_gorm != nil {
-        fmt.Println("failed to connect database")
+	if err_gorm != nil {
+		fmt.Println("failed to connect database")
 		return
-    }
+	}
 	// 알림설정 구하기
 	DBConn.Raw("CALL SP_LIST_SETTING()").First(&settings)
 	for _, setting := range settings {
@@ -76,14 +76,13 @@ func main() {
 		}
 	}
 
-
 	DBConn.Raw("CALL SP_MONITOR_TCPSERVER()").Scan(&tcp_servers)
 	fmt.Println("Check TCP Servers...")
 	for _, ts := range tcp_servers {
-		conn, err_tcp := net.DialTimeout("tcp", ts.Ip_addr+":"+strconv.Itoa(ts.Port), time.Duration(ts.Timeout) * time.Millisecond)
+		conn, err_tcp := net.DialTimeout("tcp", ts.Ip_addr+":"+strconv.Itoa(ts.Port), time.Duration(ts.Timeout)*time.Millisecond)
 		if nil != err_tcp {
 			// TCP 연결 실패
-			fmt.Println(ts.Name+": TCP Connection Fail")
+			fmt.Println(ts.Name + ": TCP Connection Fail")
 			err_cnt = ts.Err_cnt + 1
 			DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 			if ts.Err_cnt+1 == err_cnt_for_alarm {
@@ -92,7 +91,7 @@ func main() {
 				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "장애", ts.Name, ts.Ip_addr, ts.Port, "")
 				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
 				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
-					msg := "[장애] [TCP] "+ts.Name+" "+ts.Ip_addr+":"+strconv.Itoa(ts.Port)
+					msg := ":rotating_light: [장애] [TCP] " + ts.Name + " 》》》 " + ts.Ip_addr + ":" + strconv.Itoa(ts.Port)
 					send_slack(&settings, msg)
 				}
 				fmt.Println("장애 로그/알림")
@@ -100,7 +99,7 @@ func main() {
 		} else {
 			// TCP 연결 성공
 			conn.Close()
-			fmt.Println(ts.Name+": TCP Connection Success")
+			fmt.Println(ts.Name + ": TCP Connection Success")
 			if ts.Err_cnt == 0 {
 				// 아무것도 하지 않는다.
 			} else if ts.Err_cnt >= err_cnt_for_alarm {
@@ -110,7 +109,7 @@ func main() {
 				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "복구", ts.Name, ts.Ip_addr, ts.Port, "")
 				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
 				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
-					msg := "[복구] [TCP] "+ts.Name+" "+ts.Ip_addr+":"+strconv.Itoa(ts.Port)
+					msg := ":smile: [복구] [TCP] " + ts.Name + " 》》》 " + ts.Ip_addr + ":" + strconv.Itoa(ts.Port)
 					send_slack(&settings, msg)
 				}
 				fmt.Println("복구 로그/알림")
@@ -122,13 +121,11 @@ func main() {
 	}
 }
 
-
 // Send Slack Message
-func send_slack(settings *[]Setting, msg string) {
-	var slack_channel  string
-	var slack_token    string
+func send_slack(settings *[]Setting, text string) {
+	var slack_channel string
+	var slack_token string
 	var slack_username string
-	var slack_image    string
 
 	for _, setting := range *settings {
 		if setting.Code == "SLACK_CHANNEL" {
@@ -140,17 +137,21 @@ func send_slack(settings *[]Setting, msg string) {
 		if setting.Code == "SLACK_USERNAME" {
 			slack_username = setting.Value
 		}
-		if setting.Code == "SLACK_IMAGE" {
-			slack_image = setting.Value
-		}
 	}
 
-	_ = slack_channel
-	_ = slack_token
-	_ = slack_username
-	_ = slack_image
-
-	//
+	slack_text  := text
 	// 실제로 SLACK 메시지 보낸다.
-	//
+	attachment := slack.Attachment{
+		Text:      slack_text,
+	}
+	msg := slack.WebhookMessage{
+		Attachments: []slack.Attachment{attachment},
+		Channel:     slack_channel,
+		Username:    slack_username,
+	}
+
+	err := slack.PostWebhook(slack_token, &msg)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
