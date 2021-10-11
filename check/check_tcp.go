@@ -30,14 +30,9 @@ type Setting struct {
 	Memo  string
 }
 
-type Result struct {
-	Value string
-}
-
 func main() {
 	var tcp_servers []TcpServer
 	var settings []Setting
-	// var result Result
 	var err_cnt int
 
 	var err_cnt_for_alarm int
@@ -139,7 +134,14 @@ func send_slack(settings *[]Setting, text string) {
 		}
 	}
 
-	slack_text  := text
+	loc, err_time := time.LoadLocation("Asia/Seoul")
+	if err_time != nil {
+		fmt.Println(err_time)
+	}
+	now := time.Now()
+	now_local := now.In(loc)
+	log_time := now_local.Format("2006-01-02 15:04:05")
+	slack_text  := log_time+" "+text
 	// 실제로 SLACK 메시지 보낸다.
 	attachment := slack.Attachment{
 		Text:      slack_text,

@@ -1,2 +1,3 @@
 go build check_tcp.go
-# go build send_slack.go
+# go build check_http.go
+# go build check_ping.go
