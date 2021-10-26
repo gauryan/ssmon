@@ -3,14 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/joho/godotenv"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"net"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/joho/godotenv"
 	"github.com/slack-go/slack"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type TcpServer struct {
@@ -141,10 +142,10 @@ func send_slack(settings *[]Setting, text string) {
 	now := time.Now()
 	now_local := now.In(loc)
 	log_time := now_local.Format("2006-01-02 15:04:05")
-	slack_text  := log_time+" "+text
+	slack_text := log_time + " " + text
 	// 실제로 SLACK 메시지 보낸다.
 	attachment := slack.Attachment{
-		Text:      slack_text,
+		Text: slack_text,
 	}
 	msg := slack.WebhookMessage{
 		Attachments: []slack.Attachment{attachment},

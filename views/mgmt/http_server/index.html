@@ -1,0 +1,61 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">HTTP 서버</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+		<!--
+    <a href="/mgmt/admin/insert_form" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal">관리자 추가</a>
+		<a href="javascript:$('#myModal .modal-content').load('/mgmt/admin/insert_form',function(e){$('#myModal').modal('show');});" class="btn btn-sm btn-outline-dark">관리자 추가</a>
+		검색어 : bootstrap modal load dynamic content
+		https://stackoverflow.com/questions/21863462/bootstrap-modal-dynamic-content
+		-->
+		<a href="javascript:show_dialog('/mgmt/http_server/insert_form');" class="btn btn-sm btn-outline-dark">HTTP 서버 추가</a>
+  </div>
+</div>
+
+<table class="table table-hover table-sm">
+<thead>
+<tr>
+  <th style="text-align: center">HTTP서버 이름</th>
+  <th style="text-align: center">URL</th>
+  <th style="text-align: center">체크 문자열</th>
+  <th style="text-align: center">TIMEOUT</th>
+  <th style="text-align: center">수정/삭제</th>
+</tr>
+</thead>
+<tbody>
+{{range .Httpservers}}
+<tr {{ if eq .Enabled 0 }} style="background-color: lightgray;" {{ end }}>
+  <td style="text-align: center">{{.Name}}</td>
+  <td style="text-align: center">{{.Url}}</td>
+  <td style="text-align: center">{{.Chk_str}}</td>
+  <td style="text-align: center">{{.Timeout}}</td>
+  <td style="text-align: center">
+		<div class="btn-group btn-group-sm">
+    <button onclick="toggle_enabled('/mgmt/http_server/toggle_enabled/{{.Id}}');" class="btn btn-sm btn-outline-dark"> {{ if eq .Enabled 0 }} &nbsp;활성&nbsp;&nbsp; {{ else }} 비활성 {{ end }} </button>
+    <a href="javascript:show_dialog('/mgmt/http_server/update_form/{{.Id}}');" class="btn btn-sm btn-outline-dark">수정</a>
+    <button onclick="delete_item('/mgmt/http_server/delete/{{.Id}}')" class="btn btn-sm btn-outline-dark">삭제</button>
+		</div>
+  </td>
+</tr>
+{{end}}
+</tbody>
+</table>
+ 
+<div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+ 
+<script>
+// Modal Remote Reload
+$(document).on('hidden.bs.modal', function (e) {
+    $(e.target).removeData('bs.modal');
+})
+</script>
+
+<script>
+function toggle_enabled(url) {
+    location.href = url;
+}
+</script>

@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h5 class="modal-title">HTTP서버 수정</h5>
+	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <form name="update_form" action="/mgmt/http_server/update" method="post">
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>서버이름</label>
+      <input type="text" name="name" class="form-control" required value="{{ .HTTPServer.Name }}"/>
+      <input type="hidden" name="id" class="form-control" value="{{ .HTTPServer.Id }}" />
+    </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>URL <small>(필수)</small></label>
+      <input type="text" name="url" class="form-control" required value="{{ .HTTPServer.Url }}"/>
+    </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>체크 문자열</label>
+      <input type="text" name="chk_str" class="form-control" required value="{{ .HTTPServer.Chk_str }}"/>
+    </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>Timeout</label>
+      <input type="text" name="timeout" class="form-control" required value="{{ .HTTPServer.Timeout }}"/>
+    </div>
+		<br>
+    <div class="form-group" style="text-align: right">
+      <input class="btn btn-primary" type="submit" value="HTTP서버 수정" />
+    </div>
+  </form>
+</div>

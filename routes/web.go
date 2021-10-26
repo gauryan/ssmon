@@ -53,7 +53,6 @@ func Router() *fiber.App {
 	App2.Get("/admin/delete/:id", mgmt.DeleteAdmin)
 
 	App2.Get("/tcp_monitor", mgmt.MonitorTCPServer)
-
 	App2.Get("/tcp_server", mgmt.ListTCPServer)
 	App2.Get("/tcp_server/insert_form", mgmt.InsertFormTCPServer)
 	App2.Post("/tcp_server/insert", mgmt.InsertTCPServer)
@@ -61,6 +60,15 @@ func Router() *fiber.App {
 	App2.Post("/tcp_server/update", mgmt.UpdateTCPServer)
 	App2.Get("/tcp_server/toggle_enabled/:id", mgmt.ToggleEnabledTCPServer)
 	App2.Get("/tcp_server/delete/:id", mgmt.DeleteTCPServer)
+
+	App2.Get("/http_monitor", mgmt.MonitorHTTPServer)
+	App2.Get("/http_server", mgmt.ListHTTPServer)
+	App2.Get("/http_server/insert_form", mgmt.InsertFormHTTPServer)
+	App2.Post("/http_server/insert", mgmt.InsertHTTPServer)
+	App2.Get("/http_server/update_form/:id", mgmt.UpdateFormHTTPServer)
+	App2.Post("/http_server/update", mgmt.UpdateHTTPServer)
+	App2.Get("/http_server/toggle_enabled/:id", mgmt.ToggleEnabledHTTPServer)
+	App2.Get("/http_server/delete/:id", mgmt.DeleteHTTPServer)
 
 	return app
 }
