@@ -70,5 +70,14 @@ func Router() *fiber.App {
 	App2.Get("/http_server/toggle_enabled/:id", mgmt.ToggleEnabledHTTPServer)
 	App2.Get("/http_server/delete/:id", mgmt.DeleteHTTPServer)
 
+	App2.Get("/ping_monitor", mgmt.MonitorPINGServer)
+	App2.Get("/ping_server", mgmt.ListPINGServer)
+	App2.Get("/ping_server/insert_form", mgmt.InsertFormPINGServer)
+	App2.Post("/ping_server/insert", mgmt.InsertPINGServer)
+	App2.Get("/ping_server/update_form/:id", mgmt.UpdateFormPINGServer)
+	App2.Post("/ping_server/update", mgmt.UpdatePINGServer)
+	App2.Get("/ping_server/toggle_enabled/:id", mgmt.ToggleEnabledPINGServer)
+	App2.Get("/ping_server/delete/:id", mgmt.DeletePINGServer)
+
 	return app
 }

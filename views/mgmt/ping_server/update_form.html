@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h5 class="modal-title">PING서버 수정</h5>
+	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <form name="update_form" action="/mgmt/ping_server/update" method="post">
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>아이디</label>
+      <input type="text" name="name" class="form-control" required value="{{ .PINGServer.Name }}"/>
+      <input type="hidden" name="id" class="form-control" value="{{ .PINGServer.Id }}" />
+    </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>IP주소 <small>(필수)</small></label>
+      <input type="text" name="ip_addr" class="form-control" required value="{{ .PINGServer.Ip_addr }}"/>
+    </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>Timeout</label>
+      <input type="text" name="timeout" class="form-control" required value="{{ .PINGServer.Timeout }}"/>
+    </div>
+		<br>
+    <div class="form-group" style="text-align: right">
+      <input class="btn btn-primary" type="submit" value="PING서버 수정" />
+    </div>
+  </form>
+</div>

@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <h5 class="modal-title">PING서버 추가</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <form name="insert_form" action="/mgmt/ping_server/insert" method="post">
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>서버 이름 <small>(필수)</small></label>
+      <input type="text" name="name" class="form-control" required autofocus>
+    </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label >IP주소 <small>(필수)</small></label>
+      <input type="text" name="ip_addr" class="form-control" pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" required>
+    </div>
+    <div style="text-align: left; padding-bottom: 10px;">
+      <label>TIMEOUT <small>(필수, ms)</small></label>
+      <input type="number" min="10" max="10000" name="timeout" value="300" class="form-control" required>
+    </div>
+		<br>
+    <div style="text-align: right">
+      <input class="btn btn-primary" type="submit" value="PING서버 추가" />
+    </div>
+  </form>
+</div>

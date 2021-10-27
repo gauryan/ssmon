@@ -1,0 +1,25 @@
+<meta http-equiv="refresh" content="20"/>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">PING 서버 모니터링</h1>
+</div>
+<table class="table table-hover table-sm">
+<thead>
+<tr>
+  <th style="text-align: center">TCP서버 이름</th>
+  <th style="text-align: center">IP주소</th>
+  <th style="text-align: center">TIMEOUT</th>
+  <th style="text-align: center">실패횟수</th>
+</tr>
+</thead>
+<tbody>
+{{ $errcnt4alarm := .Errcnt4alarm }} 
+{{range .Pingservers}}
+<tr {{if ge .Err_cnt $errcnt4alarm}}style="background-color: orange;"{{else if ge .Err_cnt 1}}style="color: red;"{{end}}>
+  <td style="text-align: center">{{.Name}}</td>
+  <td style="text-align: center">{{.Ip_addr}}</td>
+  <td style="text-align: center">{{.Timeout}}</td>
+	<td style="text-align: center">{{.Err_cnt}}</td>
+</tr>
+{{end}}
+</tbody>
+</table>
