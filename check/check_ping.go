@@ -3,12 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"net"
-	"net/http"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -17,11 +14,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type HttpServer struct {
+type TcpServer struct {
 	Id      int
 	Name    string
-	Url     string
-	Chk_str string
+	Ip_addr string
+	Port    int
 	Timeout int
 	Err_cnt int
 }
@@ -35,7 +32,7 @@ type Setting struct {
 }
 
 func main() {
-	var http_servers []HttpServer
+	var tcp_servers []TcpServer
 	var settings []Setting
 	var err_cnt int
 
@@ -50,7 +47,7 @@ func main() {
 	err_dot := godotenv.Load(*env)
 	if err_dot != nil {
 		fmt.Println("Error loading .env file")
-		fmt.Println("'check_http -e .env파일경로'")
+		fmt.Println("'check_tcp -e .env파일경로'")
 		return
 	}
 
@@ -75,73 +72,46 @@ func main() {
 		}
 	}
 
-	DBConn.Raw("CALL SP_MONITOR_HTTPSERVER()").Scan(&http_servers)
-	fmt.Println("Check HTTP Servers...")
-	for _, ts := range http_servers {
-		fail := false
-
-		c := &http.Client{
-			Transport: &http.Transport{
-				Dial: (&net.Dialer{
-					Timeout: time.Duration(ts.Timeout) * time.Millisecond,
-				}).Dial,
-				TLSHandshakeTimeout: time.Duration(ts.Timeout) * time.Millisecond,
-			},
-			Timeout: time.Duration(ts.Timeout) * time.Millisecond,
-		}
-		resp, err_http := c.Get(ts.Url)
-		if err_http != nil {
-			// log.Fatal(err_http)
-			fail = true
-		} else {
-			body, err_read := ioutil.ReadAll(resp.Body)
-			if err_read != nil {
-				// log.Fatal(err_read)
-				fail = true
-			} else {
-				if strings.Contains(string(body), ts.Chk_str) == false {
-					fail = true
-				}
-				resp.Body.Close()
-			}
-		}
-
-		if true == fail {
-			// HTTP 연결 실패
-			fmt.Println(ts.Name + ": HTTP Connection Fail")
+	DBConn.Raw("CALL SP_MONITOR_TCPSERVER()").Scan(&tcp_servers)
+	fmt.Println("Check TCP Servers...")
+	for _, ts := range tcp_servers {
+		conn, err_tcp := net.DialTimeout("tcp", ts.Ip_addr+":"+strconv.Itoa(ts.Port), time.Duration(ts.Timeout)*time.Millisecond)
+		if nil != err_tcp {
+			// TCP 연결 실패
+			fmt.Println(ts.Name + ": TCP Connection Fail")
 			err_cnt = ts.Err_cnt + 1
-			DBConn.Exec("CALL SP_UPDATE_HTTP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
+			DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 			if ts.Err_cnt+1 == err_cnt_for_alarm {
 				// 장애 로그/알림 남긴다
 				// service, err_rec_gubun, name, ip_addr, port, url
-				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, null, null, ?)", "HTTP", "장애", ts.Name, ts.Url)
+				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "장애", ts.Name, ts.Ip_addr, ts.Port, "")
 				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
 				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
-					msg := ":rotating_light: [장애] [HTTP] " + ts.Name + " 》》》 " + ts.Url
+					msg := ":rotating_light: [장애] [TCP] " + ts.Name + " 》》》 " + ts.Ip_addr + ":" + strconv.Itoa(ts.Port)
 					send_slack(&settings, msg)
 				}
 				fmt.Println("장애 로그/알림")
 			}
 		} else {
-			// HTTP 연결 성공
-			// conn.Close()
-			fmt.Println(ts.Name + ": HTTP Connection Success")
+			// TCP 연결 성공
+			conn.Close()
+			fmt.Println(ts.Name + ": TCP Connection Success")
 			if ts.Err_cnt == 0 {
 				// 아무것도 하지 않는다.
 			} else if ts.Err_cnt >= err_cnt_for_alarm {
 				err_cnt = 0
-				DBConn.Exec("CALL SP_UPDATE_HTTP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
+				DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 				// 복구 로그/알림 남긴다
-				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, null, null, ?)", "HTTP", "복구", ts.Name, ts.Url)
+				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "복구", ts.Name, ts.Ip_addr, ts.Port, "")
 				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
 				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
-					msg := ":smile: [복구] [HTTP] " + ts.Name + " 》》》 " + ts.Url
+					msg := ":smile: [복구] [TCP] " + ts.Name + " 》》》 " + ts.Ip_addr + ":" + strconv.Itoa(ts.Port)
 					send_slack(&settings, msg)
 				}
 				fmt.Println("복구 로그/알림")
 			} else if ts.Err_cnt != 0 && ts.Err_cnt < err_cnt_for_alarm {
 				err_cnt = 0
-				DBConn.Exec("CALL SP_UPDATE_HTTP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
+				DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 			}
 		}
 	}
