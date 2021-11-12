@@ -36,7 +36,7 @@ $ cd ~
 $ wget https://github.com/gauryan/ssmon/releases/download/v0.1.1/ssmon_v0.1.1.tar.gz
 $ tar xvfz ssmon_v0.1.0.tar.gz
 ```
-* 테이블 생성 및 기초데이터를 입력합니다.
+* 테이블 생성 및 기초데이터를 입력합니다. 혹시, 아래 내용이 권한 문제로 잘 안되면, MySQL root 계정으로 실행해주세요.
 ```bash
 $ cd ssmon/install
 $ mysql -u ssmon -p ssmon < 02_create_table_sp.sql
