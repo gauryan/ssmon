@@ -9,6 +9,6 @@ INSERT INTO TB_SETTING(code, name, value, memo) VALUES('SLACK_USE_YN', 'Slack �
 INSERT INTO TB_SETTING(code, name, value, memo) VALUES('SLACK_CHANEL', 'Slack 채널', '', '');
 INSERT INTO TB_SETTING(code, name, value, memo) VALUES('SLACK_TOKEN', 'Slack Webhook URL', '', '');
 INSERT INTO TB_SETTING(code, name, value, memo) VALUES('SLACK_USERNAME', 'Slack 사용자이름', '', '');
-INSERT INTO TB_SETTING(code, name, value, memo) VALUES('LOG_SAVE_DAYS', '로그 저장일', '30', '');
+INSERT INTO TB_SETTING(code, name, value, memo) VALUES('LOG_SAVE_DAYS', '로그 저장일', '300', '');
 
 

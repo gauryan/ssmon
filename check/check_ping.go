@@ -3,22 +3,21 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/go-ping/ping"
 	"github.com/joho/godotenv"
 	"github.com/slack-go/slack"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-type TcpServer struct {
+type PingServer struct {
 	Id      int
 	Name    string
 	Ip_addr string
-	Port    int
 	Timeout int
 	Err_cnt int
 }
@@ -32,7 +31,7 @@ type Setting struct {
 }
 
 func main() {
-	var tcp_servers []TcpServer
+	var ping_servers []PingServer
 	var settings []Setting
 	var err_cnt int
 
@@ -47,7 +46,7 @@ func main() {
 	err_dot := godotenv.Load(*env)
 	if err_dot != nil {
 		fmt.Println("Error loading .env file")
-		fmt.Println("'check_tcp -e .env파일경로'")
+		fmt.Println("'check_ping -e .env파일경로'")
 		return
 	}
 
@@ -72,46 +71,74 @@ func main() {
 		}
 	}
 
-	DBConn.Raw("CALL SP_MONITOR_TCPSERVER()").Scan(&tcp_servers)
-	fmt.Println("Check TCP Servers...")
-	for _, ts := range tcp_servers {
-		conn, err_tcp := net.DialTimeout("tcp", ts.Ip_addr+":"+strconv.Itoa(ts.Port), time.Duration(ts.Timeout)*time.Millisecond)
-		if nil != err_tcp {
-			// TCP 연결 실패
-			fmt.Println(ts.Name + ": TCP Connection Fail")
+	DBConn.Raw("CALL SP_MONITOR_PINGSERVER()").Scan(&ping_servers)
+	fmt.Println("Check PING Servers...")
+	for _, ts := range ping_servers {
+		fail := false
+
+		pinger, err := ping.NewPinger(ts.Ip_addr)
+		_ = err
+		/*
+			if err != nil {
+				panic(err)
+			}
+		*/
+		pinger.Count = 1
+		pinger.Timeout = time.Duration(ts.Timeout) * time.Millisecond
+		err = pinger.Run() // Blocks until finished.
+		/*
+			if err != nil {
+				panic(err)
+			}
+		*/
+		stats := pinger.Statistics() // get send/receive/duplicate/rtt stats
+		/*
+			fmt.Println(stats)
+			fmt.Printf("%d packets transmitted, %d packets received, %d duplicates, %v%% packet loss\n",
+				stats.PacketsSent, stats.PacketsRecv, stats.PacketsRecvDuplicates, stats.PacketLoss)
+		*/
+
+		if stats.PacketLoss == 100 {
+			fail = true
+		}
+
+		// fmt.Println("Faile:", fail)
+
+		if fail == true {
+			// PING 실패
+			fmt.Println(ts.Name + ": PING Fail")
 			err_cnt = ts.Err_cnt + 1
-			DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
+			DBConn.Exec("CALL SP_UPDATE_PING_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 			if ts.Err_cnt+1 == err_cnt_for_alarm {
 				// 장애 로그/알림 남긴다
 				// service, err_rec_gubun, name, ip_addr, port, url
-				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "장애", ts.Name, ts.Ip_addr, ts.Port, "")
+				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, null, null)", "PING", "장애", ts.Name, ts.Ip_addr)
 				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
 				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
-					msg := ":rotating_light: [장애] [TCP] " + ts.Name + " 》》》 " + ts.Ip_addr + ":" + strconv.Itoa(ts.Port)
+					msg := ":rotating_light: [장애] [PING] " + ts.Name + " 》》》 " + ts.Ip_addr
 					send_slack(&settings, msg)
 				}
 				fmt.Println("장애 로그/알림")
 			}
 		} else {
-			// TCP 연결 성공
-			conn.Close()
-			fmt.Println(ts.Name + ": TCP Connection Success")
+			// PING 성공
+			fmt.Println(ts.Name + ": PING Success")
 			if ts.Err_cnt == 0 {
 				// 아무것도 하지 않는다.
 			} else if ts.Err_cnt >= err_cnt_for_alarm {
 				err_cnt = 0
-				DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
+				DBConn.Exec("CALL SP_UPDATE_PING_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 				// 복구 로그/알림 남긴다
-				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, ?, ?)", "TCP", "복구", ts.Name, ts.Ip_addr, ts.Port, "")
+				DBConn.Exec("CALL SP_INSERT_ERR_LOG(?, ?, ?, ?, null, null)", "PING", "복구", ts.Name, ts.Ip_addr)
 				// 알림 설정이 되어 있으면, Slack 메시지 보낸다.
 				if alarm_use_yn == "Y" && slack_use_yn == "Y" {
-					msg := ":smile: [복구] [TCP] " + ts.Name + " 》》》 " + ts.Ip_addr + ":" + strconv.Itoa(ts.Port)
+					msg := ":smile: [복구] [PING] " + ts.Name + " 》》》 " + ts.Ip_addr
 					send_slack(&settings, msg)
 				}
 				fmt.Println("복구 로그/알림")
 			} else if ts.Err_cnt != 0 && ts.Err_cnt < err_cnt_for_alarm {
 				err_cnt = 0
-				DBConn.Exec("CALL SP_UPDATE_TCP_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
+				DBConn.Exec("CALL SP_UPDATE_PING_SERVER_ERR_CNT(?, ?)", ts.Id, err_cnt)
 			}
 		}
 	}

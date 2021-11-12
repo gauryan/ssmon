@@ -6,8 +6,8 @@
 * 운영환경 : Ubuntu Linux + MySQL + [Fiber](https://gofiber.io/) + [GORM](https://gorm.io/)
 * 기능
   * ✔ TCP 포트 체크
-  * HTTP 체크
-  * PING 체크
+  * ✔ HTTP 체크
+  * ✔ PING 체크
   * ✔ Slack 알림
   * CPU 체크
   * Memory 체크

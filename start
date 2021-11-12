@@ -1,1 +1,1 @@
-nohup ./ssmon &
+nohup ./ssmon 1>/dev/null 2>&1 &
