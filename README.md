@@ -60,7 +60,7 @@ $ crontab -e
 * * * * * /home/ubuntu/ssmon/check/check_tcp -e /home/ubuntu/ssmon/.env
 * * * * * /home/ubuntu/ssmon/check/check_http -e /home/ubuntu/ssmon/.env
 * * * * * /home/ubuntu/ssmon/check/check_ping -e /home/ubuntu/ssmon/.env
-1 * * * * /home/ubuntu/ssmon/check/del_logs -e /home/ubuntu/ssmon/.env
+1 1 * * * /home/ubuntu/ssmon/check/del_logs -e /home/ubuntu/ssmon/.env
 ```
 * 마지막으로 서버를 시작해주시면 되겠습니다.
 ```bash
