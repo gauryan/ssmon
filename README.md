@@ -33,7 +33,7 @@ FLUSH privileges;
 * SSMON을 다운로드 합니다. (OS계정은 Ubuntu Linux의 기본인 ubuntu로 진행합니다.)
 ```bash
 $ cd ~
-$ wget https://github.com/gauryan/ssmon/releases/download/v0.1.0/ssmon_v0.1.0.tar.gz
+$ wget https://github.com/gauryan/ssmon/releases/download/v0.1.1/ssmon_v0.1.1.tar.gz
 $ tar xvfz ssmon_v0.1.0.tar.gz
 ```
 * 테이블 생성 및 기초데이터를 입력합니다.
