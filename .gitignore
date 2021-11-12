@@ -4,6 +4,7 @@ nohup.out
 check/check_tcp
 check/check_http
 check/check_ping
+check/del_logs
 web/logs
 web/tmp
 web/server.pid
